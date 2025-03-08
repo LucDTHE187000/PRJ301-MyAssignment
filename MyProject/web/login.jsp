@@ -84,6 +84,8 @@
 <body>
     <div class="login-container">
         <h2>Đăng Nhập</h2>
+        <form action="login" method="POST">
+            </form>
         <form>
             <div class="input-group">
                 <label for="username">Username:</label>
