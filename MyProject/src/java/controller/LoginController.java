@@ -56,7 +56,7 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        response.sendRedirect("login.jsp");
+        response.sendRedirect(request.getContextPath() + "/welcome.jsp");
     } 
 
     /** 
@@ -85,7 +85,7 @@ public class LoginController extends HttpServlet {
                 // Login successful: Store the account in the session and redirect to a welcome page
                 HttpSession session = request.getSession();
                 session.setAttribute("account", acc);
-                response.sendRedirect("/welcome.jsp"); // Create a welcome.jsp for success
+                response.sendRedirect("welcome.jsp"); // Create a welcome.jsp for success
             }
         } catch (Exception e) {
             // Log the exception and forward an error message
