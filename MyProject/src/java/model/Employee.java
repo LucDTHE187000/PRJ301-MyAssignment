@@ -4,7 +4,7 @@
  */
 package model;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
  *
@@ -12,22 +12,18 @@ import java.util.Date;
  */
 public class Employee {
     private int Id;
-    private String name;
+    private String Ten;
     private Date dob;
-    private String Email;
-    private String Phone;
     private int DivisionId;
     private int RoleId;
 
     public Employee() {
     }
 
-    public Employee(int Id, String name, Date dob, String Email, String Phone, int DivisionId, int RoleId) {
+    public Employee(int Id, String Ten, Date dob, int DivisionId, int RoleId) {
         this.Id = Id;
-        this.name = name;
+        this.Ten = Ten;
         this.dob = dob;
-        this.Email = Email;
-        this.Phone = Phone;
         this.DivisionId = DivisionId;
         this.RoleId = RoleId;
     }
@@ -40,12 +36,12 @@ public class Employee {
         this.Id = Id;
     }
 
-    public String getName() {
-        return name;
+    public String getTen() {
+        return Ten;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTen(String Ten) {
+        this.Ten = Ten;
     }
 
     public Date getDob() {
@@ -54,22 +50,6 @@ public class Employee {
 
     public void setDob(Date dob) {
         this.dob = dob;
-    }
-
-    public String getEmail() {
-        return Email;
-    }
-
-    public void setEmail(String Email) {
-        this.Email = Email;
-    }
-
-    public String getPhone() {
-        return Phone;
-    }
-
-    public void setPhone(String Phone) {
-        this.Phone = Phone;
     }
 
     public int getDivisionId() {
@@ -87,5 +67,5 @@ public class Employee {
     public void setRoleId(int RoleId) {
         this.RoleId = RoleId;
     }
-      
+    
 }
