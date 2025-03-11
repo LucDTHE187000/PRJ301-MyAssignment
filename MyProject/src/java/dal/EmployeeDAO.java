@@ -26,10 +26,9 @@ public class EmployeeDAO extends DBContext{
             while (rs.next()) {
                 Employee em = new Employee();
                 em.setId(rs.getInt(1));
-                em.setTen(rs.getString(2));
+                em.setName(rs.getString(2));
                 em.setDob(rs.getDate(3));
-                em.setDivisionId(rs.getInt(4));
-                em.setRoleId(rs.getInt(5));
+                em.setParentemployee(rs.getInt(4));
                 list.add(em);
             }
         } catch (Exception e) {
@@ -46,10 +45,10 @@ public class EmployeeDAO extends DBContext{
             if (rs.next()) {
                 Employee ep = new Employee();
                 ep.setId(rs.getInt(1));
-                ep.setTen(rs.getString(2));
+                ep.setName(rs.getString(2));
                 ep.setDob(rs.getDate(3));
-                ep.setDivisionId(rs.getInt(4));
-                ep.setRoleId(rs.getInt(5));
+                ep.setParentemployee(rs.getInt(4));
+                
                 return ep;
             }
         } catch (Exception e) {
@@ -59,18 +58,16 @@ public class EmployeeDAO extends DBContext{
     }
    public void addEmployee(Employee employee) {
         String sql = "INSERT INTO [dbo].[Employee]\n"
-                + "           ([Ten]\n"
+                + "           ([Name]\n"
                 + "           ,[Dob]\n"
-                + "           ,[DivisionId]\n"
-                + "           ,[RoleId])\n"
+                + "           ,[Parentemployee]\n"
                 + "     VALUES\n"
-                + "           (?,?,?,?)";
+                + "           (?,?,?)";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
-            st.setString(1, employee.getTen());
+            st.setString(1, employee.getName());
             st.setDate(2, employee.getDob());
-            st.setInt(3, employee.getDivisionId());
-            st.setInt(4, employee.getRoleId());
+            st.setInt(3, employee.getParentemployee());
             st.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -79,14 +76,13 @@ public class EmployeeDAO extends DBContext{
 
     public void UpdateEmployee(Employee employee) {
         String sql = "UPDATE [dbo].[Employee]\n"
-                + "   SET [Ten] = ?,[Dob] = ?,[DivisionId] = ?,[RoleId] = ?\n"
+                + "   SET [Name] = ?,[Dob] = ?,[Parentemployee] = ?\n"
                 + " WHERE  [Id] = ? ";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, employee.getTen());
+            ps.setString(1, employee.getName());
             ps.setDate(2, employee.getDob());
-            ps.setInt(3, employee.getDivisionId());
-            ps.setInt(4, employee.getRoleId());
+            ps.setInt(3, employee.getParentemployee());
             ps.setInt(5, employee.getId());
             ps.executeUpdate();
 
