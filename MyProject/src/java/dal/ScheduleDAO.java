@@ -12,6 +12,7 @@ import java.util.List;
 import model.Schedule;
 import java.time.LocalDate;
 
+
 /**
  *
  * @author admi
@@ -41,4 +42,5 @@ public class ScheduleDAO extends DBContext {
         }
         return schedules;
     }
+    
 }

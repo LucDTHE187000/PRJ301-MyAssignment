@@ -12,20 +12,18 @@ import java.sql.Date;
  */
 public class Employee {
     private int Id;
-    private String Ten;
+    private String Name;
     private Date dob;
-    private int DivisionId;
-    private int RoleId;
+    private int Parentemployee;
 
     public Employee() {
     }
 
-    public Employee(int Id, String Ten, Date dob, int DivisionId, int RoleId) {
+    public Employee(int Id, String Name, Date dob, int Parentemployee) {
         this.Id = Id;
-        this.Ten = Ten;
+        this.Name = Name;
         this.dob = dob;
-        this.DivisionId = DivisionId;
-        this.RoleId = RoleId;
+        this.Parentemployee = Parentemployee;
     }
 
     public int getId() {
@@ -36,12 +34,12 @@ public class Employee {
         this.Id = Id;
     }
 
-    public String getTen() {
-        return Ten;
+    public String getName() {
+        return Name;
     }
 
-    public void setTen(String Ten) {
-        this.Ten = Ten;
+    public void setName(String Name) {
+        this.Name = Name;
     }
 
     public Date getDob() {
@@ -52,20 +50,12 @@ public class Employee {
         this.dob = dob;
     }
 
-    public int getDivisionId() {
-        return DivisionId;
+    public int getParentemployee() {
+        return Parentemployee;
     }
 
-    public void setDivisionId(int DivisionId) {
-        this.DivisionId = DivisionId;
+    public void setParentemployee(int Parentemployee) {
+        this.Parentemployee = Parentemployee;
     }
 
-    public int getRoleId() {
-        return RoleId;
-    }
-
-    public void setRoleId(int RoleId) {
-        this.RoleId = RoleId;
-    }
-    
 }

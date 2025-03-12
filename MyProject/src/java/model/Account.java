@@ -13,15 +13,17 @@ public class Account {
     private String Username;
     private String Password;
     private int EmployeeId;
+    private int RoleId;
 
     public Account() {
     }
 
-    public Account(int Id, String Username, String Password, int EmployeeId) {
+    public Account(int Id, String Username, String Password, int EmployeeId, int RoleId) {
         this.Id = Id;
         this.Username = Username;
         this.Password = Password;
         this.EmployeeId = EmployeeId;
+        this.RoleId = RoleId;
     }
 
     public int getId() {
@@ -55,5 +57,12 @@ public class Account {
     public void setEmployeeId(int EmployeeId) {
         this.EmployeeId = EmployeeId;
     }
-    
+
+    public int getRoleId() {
+        return RoleId;
+    }
+
+    public void setRoleId(int RoleId) {
+        this.RoleId = RoleId;
+    }
 }

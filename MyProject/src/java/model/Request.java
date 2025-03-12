@@ -13,8 +13,8 @@ import java.util.Date;
 public class Request {
     private int Id;
     private int EmployeeId;
-    private Date DateFrom;
     private Date DateTo;
+    private Date DateFrom;
     private Date DateCreate;
     private String Reason;
     private String Status;
@@ -22,11 +22,11 @@ public class Request {
     public Request() {
     }
 
-    public Request(int Id, int EmployeeId, Date DateFrom, Date DateTo, Date DateCreate, String Reason, String Status) {
+    public Request(int Id, int EmployeeId, Date DateTo, Date DateFrom, Date DateCreate, String Reason, String Status) {
         this.Id = Id;
         this.EmployeeId = EmployeeId;
-        this.DateFrom = DateFrom;
         this.DateTo = DateTo;
+        this.DateFrom = DateFrom;
         this.DateCreate = DateCreate;
         this.Reason = Reason;
         this.Status = Status;
@@ -48,20 +48,20 @@ public class Request {
         this.EmployeeId = EmployeeId;
     }
 
-    public Date getDateFrom() {
-        return DateFrom;
-    }
-
-    public void setDateFrom(Date DateFrom) {
-        this.DateFrom = DateFrom;
-    }
-
     public Date getDateTo() {
         return DateTo;
     }
 
     public void setDateTo(Date DateTo) {
         this.DateTo = DateTo;
+    }
+
+    public Date getDateFrom() {
+        return DateFrom;
+    }
+
+    public void setDateFrom(Date DateFrom) {
+        this.DateFrom = DateFrom;
     }
 
     public Date getDateCreate() {
@@ -87,5 +87,5 @@ public class Request {
     public void setStatus(String Status) {
         this.Status = Status;
     }
-    
+ 
 }

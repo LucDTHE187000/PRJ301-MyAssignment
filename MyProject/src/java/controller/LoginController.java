@@ -56,7 +56,7 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        response.sendRedirect(request.getContextPath() + "/welcome.jsp");
+        request.getRequestDispatcher("login.jsp").forward(request, response);
     } 
 
     /** 
@@ -72,7 +72,7 @@ public class LoginController extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        try {
+       
             AccountDAO accountDAO = new AccountDAO();
             Account acc = accountDAO.validateUser(username, password);
 
@@ -85,14 +85,9 @@ public class LoginController extends HttpServlet {
                 // Login successful: Store the account in the session and redirect to a welcome page
                 HttpSession session = request.getSession();
                 session.setAttribute("account", acc);
-                response.sendRedirect("welcome.jsp"); // Create a welcome.jsp for success
-            }
-        } catch (Exception e) {
-            // Log the exception and forward an error message
-            request.setAttribute("error", "An error occurred during login");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-            e.printStackTrace(); // Log the exception for debugging
-        }
+                response.sendRedirect("Welcome"); // Create a welcome.jsp for success
+            
+        } 
     }
     
 

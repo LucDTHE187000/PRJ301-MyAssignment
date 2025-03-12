@@ -47,9 +47,10 @@
             padding: 8px;
             margin-top: 5px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 20px;
             outline: none;
             background: #f9f9f9;
+            margin-right: 30px;
         }
         .input-group input:focus {
             border-color: #ff7e5f;

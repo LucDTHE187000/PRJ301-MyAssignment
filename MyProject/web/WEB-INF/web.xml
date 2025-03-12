@@ -4,8 +4,16 @@
         <servlet-name>LoginController</servlet-name>
         <servlet-class>controller.LoginController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>WelcomeController</servlet-name>
+        <servlet-class>controller.WelcomeController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/welcome</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>WelcomeController</servlet-name>
+        <url-pattern>/Welcome</url-pattern>
     </servlet-mapping>
 </web-app>
