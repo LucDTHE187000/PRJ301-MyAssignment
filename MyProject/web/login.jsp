@@ -20,6 +20,22 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            position: relative;
+        }
+        .logout-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .logout-btn:hover {
+            background: #c0392b;
         }
         .login-container {
             background: white;
@@ -50,7 +66,6 @@
             border-radius: 20px;
             outline: none;
             background: #f9f9f9;
-            margin-right: 30px;
         }
         .input-group input:focus {
             border-color: #ff7e5f;
@@ -83,10 +98,10 @@
     </style>
 </head>
 <body>
+    <button class="logout-btn" onclick="window.location.href='logout.jsp'">Logout</button>
     <div class="login-container">
         <h2>Đăng Nhập</h2>
         <form action="welcome" method="POST">
-            
             <div class="input-group">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" required>
