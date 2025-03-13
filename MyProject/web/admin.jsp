@@ -11,7 +11,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Thêm Lịch Làm Việc</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    
     <style>
         body { background-color: #f8f9fa; }
         .container { margin-top: 50px; }
@@ -27,7 +27,7 @@
     <div class="card p-4">
         <h2 class="text-center text-primary">Thêm Lịch Làm Việc</h2>
         
-        <form method="post" action="addSchedule.jsp">
+        <form action="addSchedule.jsp" method="post">
             <div class="form-group mb-3">
                 <label for="employeeName">Tên Nhân Viên:</label>
                 <input type="text" class="form-control" id="employeeName" name="employeeName" required>
