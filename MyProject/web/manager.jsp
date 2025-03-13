@@ -111,6 +111,14 @@
 </head>
 <body>
     <div class="container">
+        <div style="position: absolute; top: 20px; right: 20px;">
+    <button class="btn btn-secondary" onclick="logout()">Logout</button>
+    </div>
+     <script>
+    function logout() {
+        window.location.href = 'logout.jsp'; // Điều hướng đến trang logout
+    }
+    </script>
         <h2>Hệ Thống Quản Lý Nghỉ Phép</h2>
         <div class="button-group">
             <button class="btn btn-primary" onclick="showSection('create-form')">Tạo Đơn</button>
