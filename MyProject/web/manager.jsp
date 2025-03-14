@@ -122,19 +122,23 @@
         <h2>Hệ Thống Quản Lý Nghỉ Phép</h2>
         <div class="button-group">
             <button class="btn btn-primary" onclick="showSection('create-form')">Tạo Đơn</button>
-            <button class="btn btn-primary" onclick="showSection('list-requests')">Danh Sách Đơn</button>
-            <button class="btn btn-primary" onclick="showSection('approval-section')">Xét Duyệt Đơn</button>
+            <button class="btn btn-primary" onclick="showSection('list-requests')">Xem Đơn</button>
+            <button class="btn btn-primary" onclick="showSection('approval-section')">Xét Duyệt Đơn Cấp Dưới</button>
         </div>
         <div id="create-form" class="content">
             <h3>Tạo Đơn Nghỉ Phép</h3>
-            <form>
+            <form action="welcome" method="POST">
                 <div class="form-group">
-                    <label for="start-date">Ngày Bắt Đầu:</label>
-                    <input type="date" id="start-date" name="start-date">
+                    <label for="to-date">Ngày Bắt Đầu:</label>
+                    <input type="date" id="to-date" name="to-date">
                 </div>
                 <div class="form-group">
-                    <label for="end-date">Ngày Kết Thúc:</label>
-                    <input type="date" id="end-date" name="end-date">
+                    <label for="from-date">Ngày Kết Thúc:</label>
+                    <input type="date" id="from-date" name="from-date">
+                </div>
+                <div class="form-group">
+                    <label for="create-date">Ngày Tạo Đơn:</label>
+                    <input type="date" id="create-date" name="create-date">
                 </div>
                 <div class="form-group">
                     <label for="reason">Lý Do Nghỉ Phép:</label>
@@ -164,8 +168,7 @@
                     <td>In Progress</td>
                     <td>Nguyễn A</td>
                     
-                    <td><button class="btn btn-primary">Xem</button>
-                        <button class="btn btn-primary">Xét Duyệt</button>
+                    <td><button class="btn btn-primary">Đã Duyệt</button>
                     </td>
                 </tr>
             </table>
