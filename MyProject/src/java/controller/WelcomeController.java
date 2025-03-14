@@ -12,7 +12,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
 import model.Account;
 
 /**
@@ -59,15 +58,18 @@ public class WelcomeController extends HttpServlet {
         HttpSession session = request.getSession();
         Account acc = (Account) session.getAttribute("account");
         if(acc==null) {
-            response.sendRedirect("login");
+            response.sendRedirect("welcome");
         } else {
             switch (acc.getRoleId()){
                 case 1: 
                     request.getRequestDispatcher("admin.jsp").forward(request, response);
+                    break;
                 case 2: 
                     request.getRequestDispatcher("manager.jsp").forward(request, response);
+                    break;
                 case 3: 
                     request.getRequestDispatcher("employee1.jsp").forward(request, response);
+                    break;
                     
             }
         }
