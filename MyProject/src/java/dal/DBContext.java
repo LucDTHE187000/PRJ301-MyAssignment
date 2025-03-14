@@ -19,7 +19,7 @@ public class DBContext {
 
     public DBContext() {
         // Edit URL, username, password to authenticate with your MS SQL Server
-        String url = "jdbc:sqlserver://admin\\SQLEXPRESS:1433;databaseName=DonXinNghiPhepASM;trustServerCertificate=true;";
+        String url = "jdbc:sqlserver://admin\\SQLEXPRESS:1433;databaseName=MANAGEMENT;trustServerCertificate=true;";
         String username = "sa";
         String password = "12345";
         try {
@@ -31,7 +31,7 @@ public class DBContext {
     }
 
     public static void main(String[] args) {
-        String url = "jdbc:sqlserver://admin\\SQLEXPRESS:1433;databaseName=DonXinNghiPhepASM;trustServerCertificate=true;";
+        String url = "jdbc:sqlserver://admin\\SQLEXPRESS:1433;databaseName=MANAGEMENT;trustServerCertificate=true;";
         String username = "sa";
         String password = "12345";
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
