@@ -98,7 +98,7 @@
     </style>
 </head>
 <body>
-    <button class="logout-btn" onclick="window.location.href='logout.jsp'">Logout</button>
+    
     <div class="login-container">
         <h2>Đăng Nhập</h2>
         <form action="welcome" method="POST">
