@@ -15,6 +15,7 @@ import java.sql.*;
  * @author admi
  */
 public class AccountDAO extends DBContext{
+    
     DBContext db = new DBContext();
 
     public Account validateUser(String username, String password) {
@@ -112,4 +113,5 @@ public class AccountDAO extends DBContext{
     }
 
 }
+
 
