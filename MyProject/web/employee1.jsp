@@ -112,13 +112,9 @@
 <body>
     <div class="container">
         <div style="position: absolute; top: 20px; right: 20px;">
-    <button class="btn btn-secondary" onclick="logout()">Logout</button>
+    <button class="btn btn-secondary" onclick="window.location.href='http://localhost:9999/MyProject/Logout'">Logout</button>
     </div>
-     <script>
-    function logout() {
-        window.location.href = 'logout.jsp'; // Điều hướng đến trang logout
-    }
-    </script>
+    
         <h2>Hệ Thống Quản Lý Nghỉ Phép</h2>
         <div class="button-group">
             <button class="btn btn-primary" onclick="showSection('create-form')">Tạo Đơn</button>
@@ -127,14 +123,18 @@
         </div>
         <div id="create-form" class="content">
             <h3>Tạo Đơn Nghỉ Phép</h3>
-            <form>
+            <form action="welcome" method="POST">
                 <div class="form-group">
-                    <label for="start-date">Ngày Bắt Đầu:</label>
-                    <input type="date" id="start-date" name="start-date">
+                    <label for="to-date">Ngày Bắt Đầu:</label>
+                    <input type="date" id="to-date" name="to-date">
                 </div>
                 <div class="form-group">
-                    <label for="end-date">Ngày Kết Thúc:</label>
-                    <input type="date" id="end-date" name="end-date">
+                    <label for="from-date">Ngày Kết Thúc:</label>
+                    <input type="date" id="from-date" name="from-date">
+                </div>
+                <div class="form-group">
+                    <label for="create-date">Ngày Tạo Đơn:</label>
+                    <input type="date" id="create-date" name="create-date">
                 </div>
                 <div class="form-group">
                     <label for="reason">Lý Do Nghỉ Phép:</label>
