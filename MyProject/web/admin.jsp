@@ -4,48 +4,113 @@
     Author     : admi
 --%>
 
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="java.sql.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Thêm Lịch Làm Việc</title>
+    <title>Agenda</title>
     
     <style>
-        body { background-color: #f8f9fa; }
-        .container { margin-top: 50px; }
-        .form-group label { font-weight: bold; }
-        .card { box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
-        .btn-custom { background-color: #007bff; color: white; }
-        .btn-custom:hover { background-color: #0056b3; }
+        body {
+            background-color: #f0f8ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .table-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+        .table th {
+            background-color: #007bff;
+            color: white;
+        }
+        .table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .working {
+            background-color: #90ee90;
+        }
+        .leave {
+            background-color: #ff6961;
+        }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <div class="card p-4">
-        <h2 class="text-center text-primary">Thêm Lịch Làm Việc</h2>
-        
-        <form action="addSchedule.jsp" method="post">
-            <div class="form-group mb-3">
-                <label for="employeeName">Tên Nhân Viên:</label>
-                <input type="text" class="form-control" id="employeeName" name="employeeName" required>
-            </div>
-            
-            <div class="form-group mb-3">
-                <label for="date">Ngày Làm Việc:</label>
-                <input type="date" class="form-control" id="date" name="date" required>
-            </div>
-            
-            <div class="form-group mb-3">
-                <label>Trạng Thái:</label>
-                <select class="form-control" name="status">
-                    <option value="1">Đi Làm</option>
-                    <option value="0">Nghỉ Phép</option>
-                </select>
-            </div>
-            
-            <button type="submit" class="btn btn-custom w-100">Thêm</button>
-        </form>
-   
+<div class="table-container">
+    <h2 class="text-center mb-4">Agenda - Tình hình lao động của phòng ban</h2>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Nhân sự</th>
+            <th>1/1</th>
+            <th>2/1</th>
+            <th>3/1</th>
+            <th>4/1</th>
+            <th>5/1</th>
+            <th>6/1</th>
+            <th>7/1</th>
+            <th>8/1</th>
+            <th>9/1</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Mr A</td>
+            <td class="working"></td>
+            <td class="working"></td>
+            <td class="working"></td>
+            <td class="working"></td>
+            <td class="working"></td>
+            <td class="working"></td>
+            <td class="working"></td>
+            <td class="working"></td>
+            <td class="working"></td>
+        </tr>
+        <tr>
+            <td>Mr B</td>
+            <td class="working"></td>
+            <td class="working"></td>
+            <td class="leave"></td>
+            <td class="leave"></td>
+            <td class="leave"></td>
+            <td class="working"></td>
+            <td class="working"></td>
+            <td class="working"></td>
+            <td class="working"></td>
+        </tr>
+        <tr>
+            <td>Mr C</td>
+            <td class="working"></td>
+            <td class="working"></td>
+            <td class="working"></td>
+            <td class="working"></td>
+            <td class="working"></td>
+            <td class="working"></td>
+            <td class="leave"></td>
+            <td class="leave"></td>
+            <td class="working"></td>
+        </tr>
+        <tr>
+            <td>Mr D</td>
+            <td class="working"></td>
+            <td class="working"></td>
+            <td class="working"></td>
+            <td class="working"></td>
+            <td class="working"></td>
+            <td class="working"></td>
+            <td class="leave"></td>
+     <td class="working"></td>
+            <td class="working"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
