@@ -60,8 +60,27 @@ public class RequestController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
-    } 
+        HttpSession session = request.getSession();
+    Account account = (Account) session.getAttribute("account");
+    if (account == null) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
+    
+    String action = request.getParameter("action");
+    if ("listRequests".equals(action)) {
+        
+        RequestDAO dao = new RequestDAO();
+        List<Request> list = dao.getRequestsByEmployeeId(account.getEmployeeId()); 
+        request.setAttribute("listRequests", list);
+        // Forward về employee1.jsp để hiển thị danh sách
+        request.getRequestDispatcher("employee1.jsp").forward(request, response);
+        return;
+    }
+    
+    // Các xử lý khác nếu cần
+    processRequest(request, response);
+}
 
     /** 
      * Handles the HTTP <code>POST</code> method.
@@ -84,7 +103,7 @@ public class RequestController extends HttpServlet {
         List<String> error = new ArrayList<>();
         if (Reason == null || DateTo == null || DateFrom == null) {
             error.add("Dữ liệu không hợp lệ, nhập lại.");
-            request.getRequestDispatcher("Form.jsp").forward(request, response);
+            request.getRequestDispatcher("employee1.jsp").forward(request, response);
         }
 
         Date datefrom = Date.valueOf(DateFrom);
@@ -105,12 +124,12 @@ public class RequestController extends HttpServlet {
         }
         if (!error.isEmpty()) {
             request.setAttribute("error", error);
-            request.getRequestDispatcher("Form.jsp").forward(request, response);
+            request.getRequestDispatcher("employee1.jsp").forward(request, response);
         }
-        RequestDAO requestdao = new RequestDAO();
+        RequestDAO RequestDAO = new RequestDAO();
         Request re = new Request(0, account.getEmployeeId(), dateto, datefrom, now, Reason, "Inprogress");
-        requestdao.insertRequest(re);
-        response.sendRedirect("home");
+        RequestDAO.insertRequest(re);
+        response.sendRedirect("Welcome");
     }
     /** 
      * Returns a short description of the servlet.
