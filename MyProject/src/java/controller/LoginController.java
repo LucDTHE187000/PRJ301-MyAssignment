@@ -85,7 +85,7 @@ public class LoginController extends HttpServlet {
                 // Login successful: Store the account in the session and redirect to a welcome page
                 HttpSession session = request.getSession();
                 session.setAttribute("account", acc);
-                response.sendRedirect("Welcome"); // Create a welcome.jsp for success
+                response.sendRedirect("Welcome");// Create a welcome.jsp for success
             
         } 
     }
