@@ -32,6 +32,7 @@ public class AccountDAO extends DBContext{
                 account.setUsername(rs.getString(2));
                 account.setPassword(rs.getString(3));
                 account.setEmployeeId(rs.getInt(4));
+                account.setRoleId(rs.getInt(5));
                 return account;
             }
         } catch (Exception e) {
@@ -52,6 +53,7 @@ public class AccountDAO extends DBContext{
                 account.setUsername(rs.getString(2));
                 account.setPassword(rs.getString(3));
                 account.setEmployeeId(rs.getInt(4));
+                account.setRoleId(rs.getInt(5));
                 acc.add(account);
             }
 
@@ -67,13 +69,15 @@ public class AccountDAO extends DBContext{
                 + "           ,[Username]\n"
                 + "           ,[Password]\n"
                 + "           ,[EmployeeId])\n"
+                + "           ,[RoleId])\n"
                 + "     VALUES\n"
-                + "           (? ,?,?,?) ";
+                + "           (?,?,?,?,?) ";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, account.getUsername());
             ps.setString(2, account.getPassword());
             ps.setInt(3, account.getEmployeeId());
+            ps.setInt(4,account.getRoleId());
             ps.executeUpdate();
 
         } catch (Exception e) {
@@ -87,13 +91,15 @@ public class AccountDAO extends DBContext{
                 + "   SET [Username] = ?\n"
                 + "      ,[Password] = ?\n"
                 + "      ,[EmployeeId] = ?\n"
+                + "      ,[RoleId] = ?\n"
                 + " WHERE [Id] = ? ";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, account.getUsername());
             ps.setString(2, account.getPassword());
             ps.setInt(3, account.getEmployeeId());
-            ps.setInt(4, account.getId());
+            ps.setInt(4, account.getRoleId());
+            ps.setInt(5, account.getId());
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -111,7 +117,11 @@ public class AccountDAO extends DBContext{
             e.printStackTrace();
         }
     }
-
+    public static void main(String[] args) {
+        AccountDAO acc = new AccountDAO();
+        Account a = acc.validateUser("manager", "dtl31072004");
+        System.out.println(a.getRoleId());
+        
+    }
 }
-
 
