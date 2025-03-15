@@ -1,116 +1,86 @@
 <%-- 
-    Document   : admin
-    Created on : 11 Mar 2025, 9:29:39 pm
+    Document   : admin.jsp
+    Created on : 15 Mar 2025, 4:06:29 pm
     Author     : admi
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <title>Agenda</title>
-    
-    <style>
-        body {
-            background-color: #f0f8ff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .table-container {
-            background-color: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-        }
-        .table th {
-            background-color: #007bff;
-            color: white;
-        }
-        .table td {
-            text-align: center;
-            vertical-align: middle;
-        }
-        .working {
-            background-color: #90ee90;
-        }
-        .leave {
-            background-color: #ff6961;
-        }
-    </style>
-</head>
-<body>
-<div class="table-container">
-    <h2 class="text-center mb-4">Agenda - Tình hình lao động của phòng ban</h2>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>Nhân sự</th>
-            <th>1/1</th>
-            <th>2/1</th>
-            <th>3/1</th>
-            <th>4/1</th>
-            <th>5/1</th>
-            <th>6/1</th>
-            <th>7/1</th>
-            <th>8/1</th>
-            <th>9/1</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>Mr A</td>
-            <td class="working"></td>
-            <td class="working"></td>
-            <td class="working"></td>
-            <td class="working"></td>
-            <td class="working"></td>
-            <td class="working"></td>
-            <td class="working"></td>
-            <td class="working"></td>
-            <td class="working"></td>
-        </tr>
-        <tr>
-            <td>Mr B</td>
-            <td class="working"></td>
-            <td class="working"></td>
-            <td class="leave"></td>
-            <td class="leave"></td>
-            <td class="leave"></td>
-            <td class="working"></td>
-            <td class="working"></td>
-            <td class="working"></td>
-            <td class="working"></td>
-        </tr>
-        <tr>
-            <td>Mr C</td>
-            <td class="working"></td>
-            <td class="working"></td>
-            <td class="working"></td>
-            <td class="working"></td>
-            <td class="working"></td>
-            <td class="working"></td>
-            <td class="leave"></td>
-            <td class="leave"></td>
-            <td class="working"></td>
-        </tr>
-        <tr>
-            <td>Mr D</td>
-            <td class="working"></td>
-            <td class="working"></td>
-            <td class="working"></td>
-            <td class="working"></td>
-            <td class="working"></td>
-            <td class="working"></td>
-            <td class="leave"></td>
-     <td class="working"></td>
-            <td class="working"></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-</body>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <title>Màn hình Quản Lý</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background: linear-gradient(135deg, #74ebd5, #acb6e5);
+                height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .container {
+                text-align: center;
+                background: white;
+                padding: 30px;
+                border-radius: 15px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            }
+            .button-container {
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+            }
+            .custom-button {
+                width: 200px;
+                padding: 15px;
+                border: none;
+                border-radius: 10px;
+                font-size: 16px;
+                cursor: pointer;
+                transition: 0.3s;
+            }
+            .custom-button:nth-child(1) {
+                background: #ff7eb3;
+                color: white;
+            }
+            .custom-button:nth-child(2) {
+                background: #67d7cc;
+                color: white;
+            }
+            .custom-button:hover {
+                transform: scale(1.05);
+                opacity: 0.9;
+            }
+            .logout-btn {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                background: #ff4d4d;
+                color: white;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: 0.3s;
+            }
+            .logout-btn:hover {
+                background: #cc0000;
+            }
+        </style>
+    </head>
+    <body>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+        <script>
+            function logout() {
+                window.location.href = 'login.jsp';
+            }
+        </script>
+        <div class="container">
+            <div class="button-container">
+                <button class="custom-button" onclick="window.location.href = 'Accept.jsp'">Xét Duyệt Đơn ➝</button>
+                <button class="custom-button" onclick="window.location.href = 'Agenda.jsp'">View Agenda ➝</button>
+            </div>
+        </div>
+    </body>
 </html>
