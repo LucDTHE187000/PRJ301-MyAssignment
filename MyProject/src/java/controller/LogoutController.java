@@ -56,7 +56,7 @@ public class LogoutController extends HttpServlet {
     throws ServletException, IOException {
       HttpSession session = request.getSession();
       session.setAttribute("account", null);
-      request.getRequestDispatcher("login.jsp").forward(request, response);
+      request.getRequestDispatcher("login.jsp");
       
         
     } 
