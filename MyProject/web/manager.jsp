@@ -116,7 +116,7 @@
     </div>
      <script>
     function logout() {
-        window.location.href = 'logout.jsp'; // Điều hướng đến trang logout
+        window.location.href = 'login.jsp'; // Điều hướng đến trang logout
     }
     </script>
         <h2>Hệ Thống Quản Lý Nghỉ Phép</h2>
@@ -126,30 +126,30 @@
             <button class="btn btn-primary" onclick="showSection('approval-section')">Xét Duyệt Đơn Cấp Dưới</button>
         </div>
         <div id="create-form" class="content">
-            <h3>Tạo Đơn Nghỉ Phép</h3>
-            <form action="welcome" method="POST">
-                <div class="form-group">
-                    <label for="to-date">Ngày Bắt Đầu:</label>
-                    <input type="date" id="to-date" name="to-date">
-                </div>
-                <div class="form-group">
-                    <label for="from-date">Ngày Kết Thúc:</label>
-                    <input type="date" id="from-date" name="from-date">
-                </div>
-                <div class="form-group">
-                    <label for="create-date">Ngày Tạo Đơn:</label>
-                    <input type="date" id="create-date" name="create-date">
-                </div>
-                <div class="form-group">
-                    <label for="reason">Lý Do Nghỉ Phép:</label>
-                    <textarea id="reason" name="reason" rows="3"></textarea>
-                </div>
-                <div class="btn-group">
-                    <button type="reset" class="btn btn-secondary">Hủy</button>
-                    <button type="submit" class="btn btn-primary">Gửi Đơn</button>
-                </div>
-            </form>
-        </div>
+                <h3>Tạo Đơn Nghỉ Phép</h3>
+                <form action="Request" method="POST">
+                    <div class="form-group">
+                        <label for="to-date">Ngày Bắt Đầu:</label>
+                        <input type="date" id="to-date" name="toDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="from-date">Ngày Kết Thúc:</label>
+                        <input type="date" id="from-date" name="fromDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="create-date">Ngày Tạo Đơn:</label>
+                        <input type="date" id="create-date" name="createDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="reason">Lý Do Nghỉ Phép:</label>
+                        <textarea id="reason" name="reason" rows="3"></textarea>
+                    </div>
+                    <div class="btn-group">
+                        <button type="reset" class="btn btn-secondary">Hủy</button>
+                        <button type="submit" class="btn btn-primary">Gửi Đơn</button>
+                    </div>
+                </form>
+            </div>
         <div id="list-requests" class="content">
             <h3>Danh Sách Đơn</h3>
             <table>
