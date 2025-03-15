@@ -5,6 +5,7 @@
 
 package controller;
 
+import dal.RequestDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,7 +13,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
 import model.Account;
+import model.Request;
 
 /**
  *
@@ -57,22 +60,42 @@ public class WelcomeController extends HttpServlet {
     throws ServletException, IOException {
         HttpSession session = request.getSession();
         Account acc = (Account) session.getAttribute("account");
-        if(acc==null) {
-            response.sendRedirect("welcome");
-        } else {
+        if(acc == null) {
+        response.sendRedirect("welcome");
+        return;
+    }
+
+    // Nếu người dùng ấn vào "Danh Sách Đơn" chẳng hạn
+    String action = request.getParameter("action");
+    if ("listRequests".equals(action)) {
+        // Gọi DAO lấy danh sách đơn
+        RequestDAO requestDAO = new RequestDAO();
+        int employeeId = Integer.parseInt(request.getParameter("employeeId"));
+        List<Request> list = requestDAO.getRequestsByEmployeeId(employeeId);
+        
+        // Gán vào attribute để JSP đọc
+        request.setAttribute("Request", list);
+        
+        // Forward về đúng trang JSP (ví dụ welcome.jsp hoặc employee1.jsp tuỳ phân quyền)
+        request.getRequestDispatcher("employee1.jsp").forward(request, response);
+        return;
+    }
+
             switch (acc.getRoleId()){
                 case 1: 
                     request.getRequestDispatcher("admin.jsp").forward(request, response);
-                    break;
+                   
                 case 2: 
                     request.getRequestDispatcher("manager.jsp").forward(request, response);
-                    break;
+                    
                 case 3: 
                     request.getRequestDispatcher("employee1.jsp").forward(request, response);
-                    break;
                     
+                default:
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                
             }
-        }
+        
     } 
 
     /** 
@@ -85,8 +108,45 @@ public class WelcomeController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession();
+        Account acc = (Account) session.getAttribute("account");
+         if(acc == null) {
+        response.sendRedirect("welcome");
+        return;
     }
+
+    // Nếu người dùng ấn vào "Danh Sách Đơn" chẳng hạn
+    String action = request.getParameter("action");
+    if ("listRequests".equals(action)) {
+        // Gọi DAO lấy danh sách đơn
+        RequestDAO requestDAO = new RequestDAO();
+        int employeeId = Integer.parseInt(request.getParameter("employeeId"));
+        List<Request> list = requestDAO.getRequestsByEmployeeId(employeeId);
+        
+        // Gán vào attribute để JSP đọc
+        request.setAttribute("Request", list);
+        
+        // Forward về đúng trang JSP (ví dụ welcome.jsp hoặc employee1.jsp tuỳ phân quyền)
+        request.getRequestDispatcher("employee1.jsp").forward(request, response);
+        return;
+    }
+            switch (acc.getRoleId()){
+                case 1: 
+                    request.getRequestDispatcher("admin.jsp").forward(request, response);
+                    
+                case 2: 
+                    request.getRequestDispatcher("manager.jsp").forward(request, response);
+                   
+                case 3: 
+                    request.getRequestDispatcher("employee1.jsp").forward(request, response);
+                    
+                default:
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                  
+            }
+        }
+    
+
 
     /** 
      * Returns a short description of the servlet.
