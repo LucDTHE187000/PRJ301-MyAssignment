@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controller;
 
 import dal.RequestDAO;
@@ -17,41 +16,47 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Account;
 import model.Request;
+
 /**
  *
  * @author admi
  */
 public class RequestController extends HttpServlet {
-      
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RequestController</title>");  
+            out.println("<title>Servlet RequestController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet RequestController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet RequestController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-    } 
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -59,31 +64,36 @@ public class RequestController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         HttpSession session = request.getSession();
-    Account account = (Account) session.getAttribute("account");
-    if (account == null) {
-        response.sendRedirect("login.jsp");
-        return;
-    }
-    
-    String action = request.getParameter("action");
-    if ("listRequests".equals(action)) {
-        
-        RequestDAO dao = new RequestDAO();
-        List<Request> list = dao.getRequestsByEmployeeId(account.getEmployeeId()); 
-        request.setAttribute("listRequests", list);
-        // Forward về employee1.jsp để hiển thị danh sách
-        request.getRequestDispatcher("employee1.jsp").forward(request, response);
-        return;
-    }
-    
-    // Các xử lý khác nếu cần
-    processRequest(request, response);
-}
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+        String action = request.getParameter("action");
+        if ("listRequests".equals(action)) {
+            RequestDAO dao = new RequestDAO();
+            List<Request> list = dao.getRequestsByEmployeeId(account.getEmployeeId());
+            request.setAttribute("listRequests", list);
+            switch (account.getRoleId()) {
+                case 1:
+                    request.getRequestDispatcher("admin.jsp").forward(request, response);
 
-    /** 
+                case 2:
+                    request.getRequestDispatcher("manager.jsp").forward(request, response);
+
+                case 3:
+                    request.getRequestDispatcher("employee1.jsp").forward(request, response);
+            }
+        }
+        return;
+    }
+
+    // Các xử lý khác nếu cần
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -91,8 +101,8 @@ public class RequestController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-       HttpSession session = request.getSession();
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
         if (account == null) {
             response.sendRedirect("login");
@@ -103,14 +113,14 @@ public class RequestController extends HttpServlet {
         List<String> error = new ArrayList<>();
         if (Reason == null || DateTo == null || DateFrom == null) {
             error.add("Dữ liệu không hợp lệ, nhập lại.");
-            request.getRequestDispatcher("employee1.jsp").forward(request, response);
+            SendirecttoRoleHome(account.getRoleId(), request, response);
         }
 
         Date datefrom = Date.valueOf(DateFrom);
         Date dateto = Date.valueOf(DateTo);
         Date now = Date.valueOf(LocalDate.now());
 
-        if (datefrom.after(dateto)) {
+        if (datefrom.before(dateto)) {
             error.add("Ngày bắt đầu nghỉ không thể sau ngày kết thúc nghỉ.");
         }
         if (dateto.before(now)) {
@@ -119,20 +129,23 @@ public class RequestController extends HttpServlet {
         if (datefrom.before(now)) {
             error.add("Ngày bắt đầu nghỉ không thể là quá khứ.");
         }
-        if (dateto.before(datefrom)) {
-            error.add("Ngày kết thúc nghỉ không thể trước ngày bắt đầu nghỉ.");
-        }
+
         if (!error.isEmpty()) {
+
             request.setAttribute("error", error);
-            request.getRequestDispatcher("employee1.jsp").forward(request, response);
+            SendirecttoRoleHome(account.getRoleId(), request, response);
+            return;
+        } else {
+            RequestDAO RequestDAO = new RequestDAO();
+            Request re = new Request(0, account.getEmployeeId(), dateto, datefrom, now, Reason, "Inprogress");
+            RequestDAO.insertRequest(re);
+            request.getRequestDispatcher("Welcome").forward(request, response);
         }
-        RequestDAO RequestDAO = new RequestDAO();
-        Request re = new Request(0, account.getEmployeeId(), dateto, datefrom, now, Reason, "Inprogress");
-        RequestDAO.insertRequest(re);
-        response.sendRedirect("Welcome");
     }
-    /** 
+
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override
@@ -140,4 +153,56 @@ public class RequestController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    private void SendirecttoRoleHome(int Id, HttpServletRequest request, HttpServletResponse response) {
+        switch (Id) {
+            case 1:
+            {
+                try {
+                    request.getRequestDispatcher("admin.jsp").forward(request, response);
+                } catch (ServletException ex) {
+                    Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+                break;
+
+            case 2:
+            {
+                try {
+                    request.getRequestDispatcher("manager.jsp").forward(request, response);
+                } catch (ServletException ex) {
+                    Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+                break;
+
+            case 3:
+            {
+                try {
+                    request.getRequestDispatcher("employee1.jsp").forward(request, response);
+                } catch (ServletException ex) {
+                    Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+                break;
+
+            default:
+            {
+                try {
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                } catch (ServletException ex) {
+                    Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+                break;
+
+        }
+    }
 }
