@@ -16,6 +16,14 @@
         <servlet-name>LogoutController</servlet-name>
         <servlet-class>controller.LogoutController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ProcessRequest</servlet-name>
+        <servlet-class>controller.ProcessRequest</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RequestListController</servlet-name>
+        <servlet-class>controller.RequestListController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/welcome</url-pattern>
@@ -31,5 +39,13 @@
     <servlet-mapping>
         <servlet-name>LogoutController</servlet-name>
         <url-pattern>/Logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProcessRequest</servlet-name>
+        <url-pattern>/ProcessRequest</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RequestListController</servlet-name>
+        <url-pattern>/RequestList</url-pattern>
     </servlet-mapping>
 </web-app>
