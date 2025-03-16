@@ -180,7 +180,7 @@
                             <td>${req.employeeId}</td>
                             <td>
                                 <button class="btn btn-primary">Xem</button>
-                                <button class="btn btn-primary">Xét Duyệt</button>
+                                
                             </td>
                         </tr>
                     </c:forEach>
