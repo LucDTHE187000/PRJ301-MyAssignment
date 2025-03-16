@@ -66,7 +66,7 @@ public class WelcomeController extends HttpServlet {
     }
 
     // Nếu người dùng ấn vào "Danh Sách Đơn" chẳng hạn
-    String action = request.getParameter("action");
+    /*String action = request.getParameter("action");
     if ("listRequests".equals(action)) {
         // Gọi DAO lấy danh sách đơn
         RequestDAO requestDAO = new RequestDAO();
@@ -75,25 +75,25 @@ public class WelcomeController extends HttpServlet {
         
         // Gán vào attribute để JSP đọc
         request.setAttribute("Request", list);
-        
+        */
         // Forward về đúng trang JSP (ví dụ welcome.jsp hoặc employee1.jsp tuỳ phân quyền)
-        request.getRequestDispatcher("employee1.jsp").forward(request, response);
-        return;
-    }
+        //request.getRequestDispatcher("employee1.jsp").forward(request, response);
+       // return;
+    //}
 
             switch (acc.getRoleId()){
                 case 1: 
                     request.getRequestDispatcher("admin.jsp").forward(request, response);
-                   
+                   break;
                 case 2: 
                     request.getRequestDispatcher("manager.jsp").forward(request, response);
-                    
+                    break;
                 case 3: 
                     request.getRequestDispatcher("employee1.jsp").forward(request, response);
-                    
+                    break;
                 default:
                     request.getRequestDispatcher("login.jsp").forward(request, response);
-                
+                break;
             }
         
     } 
@@ -112,37 +112,38 @@ public class WelcomeController extends HttpServlet {
         Account acc = (Account) session.getAttribute("account");
          if(acc == null) {
         response.sendRedirect("welcome");
-        return;
+      
     }
 
     // Nếu người dùng ấn vào "Danh Sách Đơn" chẳng hạn
-    String action = request.getParameter("action");
-    if ("listRequests".equals(action)) {
+   // String action = request.getParameter("action");
+    //if ("listRequests".equals(action)) {
         // Gọi DAO lấy danh sách đơn
-        RequestDAO requestDAO = new RequestDAO();
+       /* RequestDAO requestDAO = new RequestDAO();
         int employeeId = Integer.parseInt(request.getParameter("employeeId"));
         List<Request> list = requestDAO.getRequestsByEmployeeId(employeeId);
-        
+        */
         // Gán vào attribute để JSP đọc
-        request.setAttribute("Request", list);
+        //request.setAttribute("Request", list);
         
         // Forward về đúng trang JSP (ví dụ welcome.jsp hoặc employee1.jsp tuỳ phân quyền)
-        request.getRequestDispatcher("employee1.jsp").forward(request, response);
-        return;
-    }
+       // request.getRequestDispatcher("employee1.jsp").forward(request, response);
+        //return;
+    
             switch (acc.getRoleId()){
                 case 1: 
-                    request.getRequestDispatcher("admin.jsp").forward(request, response);
-                    
+                   request.getRequestDispatcher("admin.jsp").forward(request, response);
+                    break;
                 case 2: 
                     request.getRequestDispatcher("manager.jsp").forward(request, response);
-                   
+                   break;
+                
                 case 3: 
                     request.getRequestDispatcher("employee1.jsp").forward(request, response);
-                    
+                    break;
                 default:
                     request.getRequestDispatcher("login.jsp").forward(request, response);
-                  
+                  break;
             }
         }
     
