@@ -90,7 +90,7 @@ public class RequestDAO extends DBContext {
     public static void main(String[] args) {
         RequestDAO requestDAO = new RequestDAO();
         try {
-            int employeeId = 6;
+            int employeeId = 2;
             // Gọi phương thức getAllRequests để lấy danh sách đơn nghỉ phép
             List<Request> requests = requestDAO.getRequestsByEmployeeId(employeeId);
             System.out.println("Kết nối đến database thành công!");
@@ -109,5 +109,42 @@ public class RequestDAO extends DBContext {
             System.out.println("Lỗi khi kết nối hoặc truy vấn dữ liệu:");
             e.printStackTrace();
         }
+    }
+    public boolean updateRequestStatus(int requestId, String status) {
+        String sql = "UPDATE Request SET Status = ? WHERE Id = ?";
+        
+        try (Connection conn = connection;
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setInt(2, requestId);
+            
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public List<Request> getInprogressRequestsFromManagers() {
+        List<Request> requests = new ArrayList<>();
+        String sql = "SELECT Id, EmployeeId, DateFrom, DateTo, DateCreate, Reason, Status FROM Request WHERE Status = 'Inprogress'";
+        
+        try (Connection conn = connection;
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Request request = new Request();
+                request.setId(rs.getInt("Id"));
+                request.setEmployeeId(rs.getInt("EmployeeId"));
+                request.setDateFrom(rs.getDate("DateFrom"));
+                request.setDateTo(rs.getDate("DateTo"));
+                request.setDateCreate(rs.getDate("DateCreate"));
+                request.setReason(rs.getString("Reason"));
+                request.setStatus(rs.getString("Status"));
+                requests.add(request);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return requests;
     }
 }
