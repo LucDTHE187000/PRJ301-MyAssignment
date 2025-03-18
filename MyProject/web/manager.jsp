@@ -87,10 +87,10 @@
         <h2>Hệ Thống Quản Lý Nghỉ Phép</h2>
         <div class="menu">
             <button class="btn btn-primary" onclick="window.location.href = 'create.jsp'">Tạo Đơn</button>
-            <button class="btn btn-secondary" onclick="window.location.href = 'list.jsp'">Xem Đơn</button>
+            <button class="btn btn-secondary" onclick="window.location.href = 'đây.jsp'">Xem Đơn</button>
             <button class="btn btn-approve" onclick="window.location.href = 'approve.jsp'">Xét Duyệt Đơn</button>
         </div>
-        <a href="RequestList" class="view-requests">Xem Đơn Đã Gửi</a>
+        <a href="RequestList" class="view-requests">Xem Đơn Cấp Dưới</a>
     </div>
 </body>
 </html>
