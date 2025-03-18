@@ -4,7 +4,7 @@
     Author     : admi
 --%>
 
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
@@ -37,7 +37,7 @@
             <th>Trạng Thái</th>
             <th>Hành Động</th>
         </tr>
-        <c:forEach var="req" items="${listRequests}">
+        <c:forEach var="req" items="${requests}">
             <tr>
                 <td>${req.id}</td>
                 <td>${req.dateCreate}</td>
