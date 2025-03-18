@@ -12,6 +12,7 @@ import java.util.List;
 import model.Request;
 import java.sql.Date;
 import java.sql.*;
+import model.RequestDTO;
 
 /**
  *
@@ -216,42 +217,46 @@ public class RequestDAO extends DBContext {
     }
 
     public boolean deleteRequest(int requestId) {
-    String sql = "DELETE FROM request WHERE id = ?";
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setInt(1, requestId);
-        int affectedRows = ps.executeUpdate();
-        return affectedRows > 0; // Trả về true nếu xóa thành công
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false;
+        String sql = "DELETE FROM request WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, requestId);
+            int affectedRows = ps.executeUpdate();
+            return affectedRows > 0; // Trả về true nếu xóa thành công
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
-}
-    public List<Request> getRequestsByManagerId(int managerId) {
-        List<Request> requests = new ArrayList<>();
-        String sql = "SELECT sche.Id, sche.DateTo, sche.DateFrom, sche.Status, sche.DateCreate, sche.Reason, e.Name \n" +
-"FROM Request sche \n" +
-"INNER JOIN Employee e ON e.Id = sche.EmployeeId \n" +
-"WHERE e.Parentemployee = ?";
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, managerId);
-            ResultSet rs = ps.executeQuery();
+
+    public List<RequestDTO> getRequestsbyManagerID(int managerId) {
+        List<RequestDTO> list = new ArrayList<>();
+        String sql = "SELECT r.Id, r.DateCreate, r.DateFrom, r.DateTo, r.Reason, r.Status, e.Id AS eId, e.Name AS eName " +
+                     "FROM Request r " +
+                     "INNER JOIN Employee e ON r.EmployeeId = e.Id " +
+                     "WHERE r.EmployeeId = ?"; // Lọc theo EmployeeId của Manager
+        try (PreparedStatement st = db.connection.prepareStatement(sql)) {
+            st.setInt(1, managerId); // Truyền Manager ID (ví dụ: 2)
+            ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                Request request = new Request();
-                request.setId(rs.getInt("Id"));
-                request.setDateTo(rs.getDate("DateTo"));
-                request.setDateFrom(rs.getDate("DateFrom"));
-                request.setStatus(rs.getString("Status"));
-                request.setDateCreate(rs.getDate("DateCreate"));
-                request.setReason(rs.getString("Reason"));
-                
-                requests.add(request);
+                RequestDTO r = new RequestDTO();
+                r.setId(rs.getInt("Id"));
+                r.setDateCreate(rs.getDate("DateCreate"));
+                r.setDateFrom(rs.getDate("DateFrom"));
+                r.setDateTo(rs.getDate("DateTo"));
+                r.setReason(rs.getString("Reason"));
+                r.setStatus(rs.getString("Status"));
+                r.seteId(rs.getInt("eId"));
+                r.seteName(rs.getString("eName"));
+                list.add(r);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return requests;
+        return list;
+    }
+
+    public List<RequestDTO> getRequestsByManagerId(int i) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }
-
