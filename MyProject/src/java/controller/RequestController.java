@@ -79,12 +79,13 @@ public class RequestController extends HttpServlet {
             switch (account.getRoleId()) {
                 case 1:
                     request.getRequestDispatcher("admin.jsp").forward(request, response);
-
+                   break;
                 case 2:
                     request.getRequestDispatcher("manager.jsp").forward(request, response);
-
+                  break;
                 case 3:
                     request.getRequestDispatcher("employee1.jsp").forward(request, response);
+                    break;
             }
         }
         return;
@@ -138,10 +139,28 @@ public class RequestController extends HttpServlet {
         } else {
             RequestDAO RequestDAO = new RequestDAO();
             Request re = new Request(0, account.getEmployeeId(), dateto, datefrom, now, Reason, "Inprogress");
-            RequestDAO.insertRequest(re);
+            RequestDAO.insert(re);
             request.getRequestDispatcher("Welcome").forward(request, response);
         }
+        String id = request.getParameter("id");
+    String fromDate = request.getParameter("fromDate");
+    String toDate = request.getParameter("toDate");
+    String reason = request.getParameter("reason");
+    
+    if (id != null && fromDate != null && toDate != null && reason != null) {
+        RequestDAO requestDAO = new RequestDAO();
+        boolean success = requestDAO.updateRequest(Integer.parseInt(id), fromDate, toDate, reason);
+        
+        if (success) {
+            request.setAttribute("message", "Cập nhật đơn thành công!");
+        } else {
+            request.setAttribute("message", "Cập nhật thất bại, vui lòng thử lại!");
+        }
     }
+    
+    request.getRequestDispatcher("welcome.jsp").forward(request, response);
+}
+    
 
     /**
      * Returns a short description of the servlet.
