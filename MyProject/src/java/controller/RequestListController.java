@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.PrintWriter;
 import model.Account;
 import model.Request;
+import model.RequestDTO;
 
 /**
  *
@@ -84,7 +85,7 @@ public class RequestListController extends HttpServlet {
         //return;
     // Sử dụng hàm DAO đã có để lấy danh sách đơn của nhân viên đang đăng nhập.
        RequestDAO dao = new RequestDAO();
-       List<Request> requestList = dao.getRequestsByManagerId(account.getEmployeeId());
+       List<RequestDTO> requestList = dao.getRequestsByManagerId(account.getEmployeeId());
        request.setAttribute("requestList", requestList);
        request.getRequestDispatcher("list.jsp").forward(request, response);
        
