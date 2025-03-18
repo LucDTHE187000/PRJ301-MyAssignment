@@ -125,10 +125,7 @@ a.back-link:hover {
                         <label for="from-date">Ngày Kết Thúc:</label>
                         <input type="date" id="from-date" name="fromDate">
                     </div>
-                    <div class="form-group">
-                        <label for="create-date">Ngày Tạo Đơn:</label>
-                        <input type="date" id="create-date" name="createDate">
-                    </div>
+                    
                     <div class="form-group">
                         <label for="reason">Lý Do Nghỉ Phép:</label>
                         <textarea id="reason" name="reason" rows="3"></textarea>
@@ -137,7 +134,7 @@ a.back-link:hover {
                         <button type="reset" class="btn btn-secondary">Hủy</button>
                         <button type="submit" class="btn btn-primary">Gửi Đơn</button>
                     </div>
-                    <a href="welcome.jsp">Quay Lại</a>
+                    <a href="Welcome">Quay Lại</a>
                 </form>
             </div>
 </body>
