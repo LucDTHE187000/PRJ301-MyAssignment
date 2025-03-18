@@ -24,6 +24,10 @@
         <servlet-name>RequestListController</servlet-name>
         <servlet-class>controller.RequestListController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RequestServlet</servlet-name>
+        <servlet-class>controller.RequestServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/welcome</url-pattern>
@@ -47,5 +51,9 @@
     <servlet-mapping>
         <servlet-name>RequestListController</servlet-name>
         <url-pattern>/RequestList</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RequestServlet</servlet-name>
+        <url-pattern>/RequestServlet</url-pattern>
     </servlet-mapping>
 </web-app>
