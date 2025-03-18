@@ -21,7 +21,7 @@ import model.Request;
  *
  * @author admi
  */
-public class RequestServlet extends HttpServlet {
+public class Requestservlet extends HttpServlet {
     
     private RequestDAO requestDAO;
 @Override
