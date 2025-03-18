@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.RequestDAO;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,7 +14,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.PrintWriter;
+import model.Account;
 import model.Request;
 
 /**
@@ -60,38 +63,32 @@ public class RequestListController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int employeeId = (int) request.getSession().getAttribute("employeeId"); // Lấy EmployeeId từ session
-    List<Request> requestList = new ArrayList<>();
-
-    try {
-        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=MANAGEMNET;encrypt=false", "sa", "12345");
-        PreparedStatement stmt = conn.prepareStatement("SELECT id, toDate, fromDate, dateCreate, reason, status FROM Request WHERE employeeId = ?");
-        stmt.setInt(1, employeeId);
-        ResultSet rs = stmt.executeQuery();
-
-        while (rs.next()) {
-            Request req = new Request(
-                    rs.getInt("id"),
-                    employeeId, 
-                    rs.getDate("toDate"),
-                    rs.getDate("fromDate"),
-                    rs.getDate("dateCreate"),
-                    rs.getString("reason"),
-                    rs.getString("status")
-            );
-            requestList.add(req);
-        }
-
-        rs.close();
-        stmt.close();
-        conn.close();
-    } catch (Exception e) {
-        e.printStackTrace();
+      HttpSession session = request.getSession();
+    Account account = (Account) session.getAttribute("account");
+    if (account == null) {
+        response.sendRedirect("login");
+        return;
     }
-
-    request.setAttribute("requestList", requestList);
-    request.getRequestDispatcher("list.jsp").forward(request, response);
+   // String action = request.getParameter("action");
+    //if ("listRequests".equals(action)) {
+        // Gọi DAO lấy danh sách đơn
+       /* RequestDAO requestDAO = new RequestDAO();
+        int employeeId = Integer.parseInt(request.getParameter("employeeId"));
+        List<Request> list = requestDAO.getRequestsByEmployeeId(employeeId);
+        */
+        // Gán vào attribute để JSP đọc
+        //request.setAttribute("Request", list);
+        
+        // Forward về đúng trang JSP (ví dụ welcome.jsp hoặc employee1.jsp tuỳ phân quyền)
+       // request.getRequestDispatcher("employee1.jsp").forward(request, response);
+        //return;
+    // Sử dụng hàm DAO đã có để lấy danh sách đơn của nhân viên đang đăng nhập.
+       RequestDAO dao = new RequestDAO();
+       List<Request> requestList = dao.getRequestsByManagerId(account.getEmployeeId());
+       request.setAttribute("requestList", requestList);
+       request.getRequestDispatcher("list.jsp").forward(request, response);
+       
+       
 }
 
     /**
@@ -105,7 +102,7 @@ public class RequestListController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        // doGet(request, response);
     }
 
     /**
