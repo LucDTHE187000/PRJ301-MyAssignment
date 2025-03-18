@@ -131,7 +131,7 @@
             <h2>Hệ Thống Quản Lý Nghỉ Phép</h2>
             <div class="button-group">
                 <button class="btn btn-primary" onclick="showSection('create-form')">Tạo Đơn</button>
-                <button class="btn btn-primary" onclick="window.location.href='${pageContext.request.contextPath}/Request?action=listRequests'"> Xem Danh Sách Đơn </button>
+                <button class="btn btn-primary" onclick="window.location.href = '${pageContext.request.contextPath}/Request?action=listRequests'"> Xem Danh Sách Đơn </button>
 
             </div>
             <div id="create-form" class="content">
@@ -145,10 +145,7 @@
                         <label for="from-date">Ngày Kết Thúc:</label>
                         <input type="date" id="from-date" name="fromDate">
                     </div>
-                    <div class="form-group">
-                        <label for="create-date">Ngày Tạo Đơn:</label>
-                        <input type="date" id="create-date" name="createDate">
-                    </div>
+
                     <div class="form-group">
                         <label for="reason">Lý Do Nghỉ Phép:</label>
                         <textarea id="reason" name="reason" rows="3"></textarea>
@@ -157,6 +154,7 @@
                         <button type="reset" class="btn btn-secondary">Hủy</button>
                         <button type="submit" class="btn btn-primary">Gửi Đơn</button>
                     </div>
+
                 </form>
             </div>
             <div id="list-requests" class="content" style="${not empty listRequests ? 'display:block;' : 'display:none;'}">
@@ -179,40 +177,132 @@
                             <td>${req.status}</td>
                             <td>${req.employeeId}</td>
                             <td>
-                                <button class="btn btn-primary">Xem</button>
-                                
+                                <button class="btn btn-primary" onclick="showDetails('${req.id}', '${req.reason}', '${req.dateFrom}', '${req.dateTo}', '${req.status}', '${req.employeeId}')">Xem</button>
                             </td>
                         </tr>
                     </c:forEach>
                 </table>
             </div>
-        
-    
+<div id="detail-section" style="display: none; background: white; padding: 15px; border-radius: 10px; box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2); margin-top: 15px;">
+    <h3>Chi Tiết Đơn</h3>
+    <form id="update-form" action="Request" method="POST">
+        <input type="hidden" id="detail-id" name="id"> 
+        <div class="form-group">
+            <label>Lý Do:</label>
+            <textarea id="detail-reason" name="reason" rows="3" disabled></textarea>
+        </div>
+        <div class="form-group">
+            <label>Từ Ngày:</label>
+            <input type="date" id="detail-from" name="dateFrom" disabled>
+        </div>
+        <div class="form-group">
+            <label>Đến Ngày:</label>
+            <input type="date" id="detail-to" name="dateTo" disabled>
+        </div>
+        <div class="form-group">
+            <label>Trạng Thái:</label>
+            <input type="text" id="detail-status" name="status" disabled>
+        </div>
+        <div class="form-group">
+            <label>Người Tạo:</label>
+            <input type="text" id="detail-employee" name="employeeId" disabled>
+        </div>
+
+        <button type="button" id="edit-btn" class="btn btn-warning" onclick="enableEdit()">Cập Nhật</button>
+        <button type="submit" id="save-btn" class="btn btn-primary" style="display: none;">Lưu</button>
+    </form>
 </div>
-<div id="approval-section" class="content">
-    <h3>Xét Duyệt Đơn</h3>
-    <table>
-        <tr>
-            <th>Người Duyệt</th>
-            <th>Người Tạo</th>
-            <th>Từ Ngày</th>
-            <th>Đến Ngày</th>
-            <th>Lý Do</th>
-            <th>Action</th>
-        </tr>
-        <tr>
-            <td>Đặng Minh G</td>
-            <td>Nguyễn A</td>
-            <td>01/01/2026</td>
-            <td>03/01/2026</td>
-            <td>Nghỉ phép cá nhân</td>
-            <td>
-                <button class="btn btn-secondary">Reject</button>
-                <button class="btn btn-primary">Approve</button>
-            </td>
-        </tr>
-    </table>
-</div>
-</div>
-</body>
+
+<!-- Thông báo -->
+<div id="message" style="display: none; padding: 10px; margin-top: 10px; border-radius: 5px;"></div>
+
+<script>
+    function showDetails(id, reason, dateFrom, dateTo, status, employeeId) {
+        document.getElementById('detail-section').style.display = 'block';
+        document.getElementById('detail-id').value = id;
+        document.getElementById('detail-reason').value = reason;
+        document.getElementById('detail-from').value = dateFrom;
+        document.getElementById('detail-to').value = dateTo;
+        document.getElementById('detail-status').value = status;
+        document.getElementById('detail-employee').value = employeeId;
+
+        document.getElementById('edit-btn').style.display = 'inline-block';
+        document.getElementById('save-btn').style.display = 'none';
+
+        disableInputs();
+    }
+
+    function enableEdit() {
+        document.getElementById('detail-reason').disabled = false;
+        document.getElementById('detail-from').disabled = false;
+        document.getElementById('detail-to').disabled = false;
+        document.getElementById('edit-btn').style.display = 'none';
+        document.getElementById('save-btn').style.display = 'inline-block';
+    }
+
+    function disableInputs() {
+        document.getElementById('detail-reason').disabled = true;
+        document.getElementById('detail-from').disabled = true;
+        document.getElementById('detail-to').disabled = true;
+    }
+
+    document.getElementById("update-form").onsubmit = function (e) {
+        e.preventDefault();
+
+        fetch("Request", {
+            method: "POST",
+            body: new FormData(document.getElementById("update-form"))
+        })
+        .then(response => response.text())
+        .then(data => {
+            showMessage("Cập nhật thành công!", "green");
+            disableInputs();
+            document.getElementById('edit-btn').style.display = 'inline-block';
+            document.getElementById('save-btn').style.display = 'none';
+        })
+        .catch(error => showMessage("Cập nhật thất bại!", "red"));
+    };
+
+    function showMessage(msg, color) {
+        let messageBox = document.getElementById("message");
+        messageBox.innerText = msg;
+        messageBox.style.display = "block";
+        messageBox.style.backgroundColor = color;
+        messageBox.style.color = "white";
+
+        setTimeout(() => {
+            messageBox.style.opacity = "0";
+            setTimeout(() => {
+                messageBox.style.display = "none";
+                messageBox.style.opacity = "1";
+            }, 1000);
+        }, 3000);
+    }
+</script>
+        </div>
+        <div id="approval-section" class="content">
+            <h3>Xét Duyệt Đơn</h3>
+            <table>
+                <tr>
+                    <th>Người Duyệt</th>
+                    <th>Người Tạo</th>
+                    <th>Từ Ngày</th>
+                    <th>Đến Ngày</th>
+                    <th>Lý Do</th>
+                    <th>Action</th>
+                </tr>
+                <tr>
+                    <td>Đặng Minh G</td>
+                    <td>Nguyễn A</td>
+                    <td>01/01/2026</td>
+                    <td>03/01/2026</td>
+                    <td>Nghỉ phép cá nhân</td>
+                    <td>
+                        <button class="btn btn-secondary">Reject</button>
+                        <button class="btn btn-primary">Approve</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </body>
 </html>
