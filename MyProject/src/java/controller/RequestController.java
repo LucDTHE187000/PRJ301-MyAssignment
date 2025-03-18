@@ -76,17 +76,18 @@ public class RequestController extends HttpServlet {
             RequestDAO dao = new RequestDAO();
             List<Request> list = dao.getRequestsByEmployeeId(account.getEmployeeId());
             request.setAttribute("listRequests", list);
-            switch (account.getRoleId()) {
+            /*switch (account.getRoleId()) {
                 case 1:
                     request.getRequestDispatcher("admin.jsp").forward(request, response);
-                   break;
+                    break;
                 case 2:
                     request.getRequestDispatcher("manager.jsp").forward(request, response);
-                  break;
+                    break;
                 case 3:
                     request.getRequestDispatcher("employee1.jsp").forward(request, response);
                     break;
             }
+            */
         }
         return;
     }
@@ -112,9 +113,10 @@ public class RequestController extends HttpServlet {
         String DateTo = request.getParameter("toDate");
         String Reason = request.getParameter("reason");
         List<String> error = new ArrayList<>();
-        if (Reason == null || DateTo == null || DateFrom == null) {
+        if (Reason == null || DateTo == null || DateFrom == null || Reason.isEmpty()||DateFrom.isEmpty()||DateTo.isEmpty()) {
             error.add("Dữ liệu không hợp lệ, nhập lại.");
-            SendirecttoRoleHome(account.getRoleId(), request, response);
+            request.setAttribute("error", error);
+            request.getRequestDispatcher("create.jsp").forward(request, response);
         }
 
         Date datefrom = Date.valueOf(DateFrom);
@@ -134,33 +136,35 @@ public class RequestController extends HttpServlet {
         if (!error.isEmpty()) {
 
             request.setAttribute("error", error);
-            SendirecttoRoleHome(account.getRoleId(), request, response);
-            return;
+            request.getRequestDispatcher("create.jsp").forward(request, response);
+            
+
         } else {
             RequestDAO RequestDAO = new RequestDAO();
             Request re = new Request(0, account.getEmployeeId(), dateto, datefrom, now, Reason, "Inprogress");
             RequestDAO.insert(re);
+            request.setAttribute("message", "Submit successfully");
+
             request.getRequestDispatcher("Welcome").forward(request, response);
         }
-        String id = request.getParameter("id");
-    String fromDate = request.getParameter("fromDate");
-    String toDate = request.getParameter("toDate");
-    String reason = request.getParameter("reason");
-    
-    if (id != null && fromDate != null && toDate != null && reason != null) {
-        RequestDAO requestDAO = new RequestDAO();
-        boolean success = requestDAO.updateRequest(Integer.parseInt(id), fromDate, toDate, reason);
-        
-        if (success) {
-            request.setAttribute("message", "Cập nhật đơn thành công!");
-        } else {
-            request.setAttribute("message", "Cập nhật thất bại, vui lòng thử lại!");
-        }
+//        String id = request.getParameter("id");
+//        String fromDate = request.getParameter("fromDate");
+//        String toDate = request.getParameter("toDate");
+//        String reason = request.getParameter("reason");
+//
+//        if (id != null && fromDate != null && toDate != null && reason != null) {
+//            RequestDAO requestDAO = new RequestDAO();
+//            boolean success = requestDAO.updateRequest(Integer.parseInt(id), fromDate, toDate, reason);
+//
+//            if (success) {
+//                request.setAttribute("message", "Cập nhật đơn thành công!");
+//            } else {
+//                request.setAttribute("message", "Cập nhật thất bại, vui lòng thử lại!");
+//            }
+//        }
+
+//        request.getRequestDispatcher("welcome.jsp").forward(request, response);
     }
-    
-    request.getRequestDispatcher("welcome.jsp").forward(request, response);
-}
-    
 
     /**
      * Returns a short description of the servlet.
@@ -174,8 +178,7 @@ public class RequestController extends HttpServlet {
 
     private void SendirecttoRoleHome(int Id, HttpServletRequest request, HttpServletResponse response) {
         switch (Id) {
-            case 1:
-            {
+            case 1: {
                 try {
                     request.getRequestDispatcher("admin.jsp").forward(request, response);
                 } catch (ServletException ex) {
@@ -184,10 +187,9 @@ public class RequestController extends HttpServlet {
                     Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-                break;
+            break;
 
-            case 2:
-            {
+            case 2: {
                 try {
                     request.getRequestDispatcher("manager.jsp").forward(request, response);
                 } catch (ServletException ex) {
@@ -196,10 +198,9 @@ public class RequestController extends HttpServlet {
                     Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-                break;
+            break;
 
-            case 3:
-            {
+            case 3: {
                 try {
                     request.getRequestDispatcher("employee1.jsp").forward(request, response);
                 } catch (ServletException ex) {
@@ -208,10 +209,9 @@ public class RequestController extends HttpServlet {
                     Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-                break;
+            break;
 
-            default:
-            {
+            default: {
                 try {
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                 } catch (ServletException ex) {
@@ -220,7 +220,7 @@ public class RequestController extends HttpServlet {
                     Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-                break;
+            break;
 
         }
     }
