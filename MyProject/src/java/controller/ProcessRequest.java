@@ -12,6 +12,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import model.Request;
 
 /**
  *
@@ -67,23 +69,21 @@ public class ProcessRequest extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-       int requestId = Integer.parseInt(request.getParameter("id"));
-        String action = request.getParameter("action");
-        String status = action.equals("approve") ? "Approved" : "Rejected";
-        
-        RequestDAO requestDAO = new RequestDAO();
-        boolean success = requestDAO.updateRequestStatus(requestId, status);
-        
-        response.setContentType("text/plain");
-        try (PrintWriter out = response.getWriter()) {
-            if (success) {
-                out.print("Đơn đã được " + (action.equals("approve") ? "duyệt" : "từ chối"));
-            } else {
-                out.print("Lỗi khi cập nhật trạng thái đơn");
-            }
-        }
-    
+       String fromDate = request.getParameter("fromDate");
+    String toDate = request.getParameter("toDate");
+    String reason = request.getParameter("reason");
+
+    RequestDAO requestDAO = new RequestDAO();
+    boolean success = requestDAO.insertRequest(fromDate, toDate, reason);
+
+    if (success) {
+        List<Request> requestList = requestDAO.getAllRequests();
+        request.setAttribute("requestList", requestList);
+        request.getRequestDispatcher("list.jsp").forward(request, response);
+    } else {
+        response.getWriter().print("Lỗi khi tạo đơn.");
     }
+}
 
     /** 
      * Returns a short description of the servlet.
