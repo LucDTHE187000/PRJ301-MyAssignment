@@ -64,33 +64,24 @@ public class RequestListController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-      HttpSession session = request.getSession();
-    Account account = (Account) session.getAttribute("account");
-    if (account == null) {
-        response.sendRedirect("login");
-        return;
-    }
-   // String action = request.getParameter("action");
-    //if ("listRequests".equals(action)) {
-        // Gọi DAO lấy danh sách đơn
-       /* RequestDAO requestDAO = new RequestDAO();
-        int employeeId = Integer.parseInt(request.getParameter("employeeId"));
-        List<Request> list = requestDAO.getRequestsByEmployeeId(employeeId);
-        */
-        // Gán vào attribute để JSP đọc
-        //request.setAttribute("Request", list);
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            response.sendRedirect("welcome");
+            return;
+        }
+
+        RequestDAO requestDAO = new RequestDAO();
         
+        List<Request> list = requestDAO.getRequestsByEmployeeId(account.getEmployeeId());
+
+        // Gán vào attribute để JSP đọc
+        request.setAttribute("listRequests", list);
+
         // Forward về đúng trang JSP (ví dụ welcome.jsp hoặc employee1.jsp tuỳ phân quyền)
-       // request.getRequestDispatcher("employee1.jsp").forward(request, response);
-        //return;
-    // Sử dụng hàm DAO đã có để lấy danh sách đơn của nhân viên đang đăng nhập.
-       RequestDAO dao = new RequestDAO();
-       List<RequestDTO> requestList = dao.getRequestsByManagerId(account.getEmployeeId());
-       request.setAttribute("requestList", requestList);
-       request.getRequestDispatcher("list.jsp").forward(request, response);
-       
-       
-}
+        //  Sử dụng hàm DAO đã có để lấy danh sách đơn của nhân viên đang đăng nhập.
+        request.getRequestDispatcher("list.jsp").forward(request, response);
+    }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -103,7 +94,11 @@ public class RequestListController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // doGet(request, response);
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("managerId") == null) {
+            response.sendRedirect("login.jsp"); // Chuyển về trang đăng nhập nếu session không hợp lệ
+            return;
+        }
     }
 
     /**
