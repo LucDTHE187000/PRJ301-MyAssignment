@@ -76,7 +76,7 @@ public class RequestController extends HttpServlet {
             RequestDAO dao = new RequestDAO();
             List<Request> list = dao.getRequestsByEmployeeId(account.getEmployeeId());
             request.setAttribute("listRequests", list);
-            /*switch (account.getRoleId()) {
+            switch (account.getRoleId()) {
                 case 1:
                     request.getRequestDispatcher("admin.jsp").forward(request, response);
                     break;
@@ -87,7 +87,7 @@ public class RequestController extends HttpServlet {
                     request.getRequestDispatcher("employee1.jsp").forward(request, response);
                     break;
             }
-            */
+            
         }
         return;
     }
@@ -143,9 +143,9 @@ public class RequestController extends HttpServlet {
             RequestDAO RequestDAO = new RequestDAO();
             Request re = new Request(0, account.getEmployeeId(), dateto, datefrom, now, Reason, "Inprogress");
             RequestDAO.insert(re);
-            request.setAttribute("message", "Submit successfully");
-
+           // request.setAttribute("message", "Submit successfully");
             request.getRequestDispatcher("Welcome").forward(request, response);
+            request.setAttribute("message", "Submit successfully");
         }
 //        String id = request.getParameter("id");
 //        String fromDate = request.getParameter("fromDate");
