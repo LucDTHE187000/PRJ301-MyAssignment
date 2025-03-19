@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Account;
+import model.Request;
 import model.RequestDTO;
 
 /**
@@ -64,11 +65,15 @@ public class RequestManager extends HttpServlet {
                response.sendRedirect("welcome");
                return;
            }
-           RequestDAO requestDAO = new RequestDAO();
-           int managerId = account.getEmployeeId();
-           List<RequestDTO> list = requestDAO.getRequestsByManagerId(managerId);
-           request.setAttribute("requests", list);
-           request.getRequestDispatcher("đây.jsp").forward(request, response);
+         RequestDAO requestDAO = new RequestDAO();
+        int employeeId = account.getEmployeeId(); // Lấy EmployeeId từ session
+        
+        // Gọi hàm lấy danh sách đơn
+        List<Request> requestList = requestDAO.getRequestsByEmployeeId1(employeeId);
+
+        // Gửi danh sách đơn đến trang JSP
+        request.setAttribute("requests", requestList);
+        request.getRequestDispatcher("đây.jsp").forward(request, response);
            
     } 
 
