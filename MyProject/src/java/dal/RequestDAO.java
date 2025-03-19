@@ -13,6 +13,7 @@ import model.Request;
 import java.sql.Date;
 import java.sql.*;
 import model.RequestDTO;
+import model.Requestform;
 
 /**
  *
@@ -23,7 +24,7 @@ public class RequestDAO extends DBContext {
     DBContext db = new DBContext();
 
     public List<Request> getRequestsByEmployeeId(int employeeId) {
-        List<Request> requests = new ArrayList<>();
+        List<Request> requests = new ArrayList<>(); 
         String sql = "SELECT * FROM Request WHERE EmployeeId = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -85,29 +86,7 @@ public class RequestDAO extends DBContext {
         return false;
     }
 
-    public static void main(String[] args) {
-        RequestDAO requestDAO = new RequestDAO();
-        try {
-            int employeeId = 2;
-            // Gọi phương thức getAllRequests để lấy danh sách đơn nghỉ phép
-            List<Request> requests = requestDAO.getRequestsByEmployeeId(employeeId);
-            System.out.println("Kết nối đến database thành công!");
-            System.out.println("Số đơn nghỉ phép hiện có: " + requests.size());
-            // Hiển thị thông tin đơn đầu tiên nếu có
-            if (!requests.isEmpty()) {
-                Request r = requests.get(0);
-                System.out.println("Đơn đầu tiên: ");
-                System.out.println("EmployeeId: " + r.getEmployeeId());
-                System.out.println("DateFrom: " + r.getDateFrom());
-                System.out.println("DateTo: " + r.getDateTo());
-                System.out.println("Reason: " + r.getReason());
-                System.out.println("Status: " + r.getStatus());
-            }
-        } catch (Exception e) {
-            System.out.println("Lỗi khi kết nối hoặc truy vấn dữ liệu:");
-            e.printStackTrace();
-        }
-    }
+   
 
     public boolean updateRequestStatus(int requestId, String status) {
         String sql = "UPDATE Request SET Status = ? WHERE Id = ?";
@@ -180,6 +159,33 @@ public class RequestDAO extends DBContext {
         }
         return request;
     }
+    public List<Request> getRequestsByEmployeeId1(int employeeId) {
+    List<Request> requests = new ArrayList<>();
+    String sql = "SELECT * FROM Request WHERE EmployeeId = ?";
+    
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, employeeId); // EmployeeId là int
+        ResultSet rs = ps.executeQuery();
+        
+        while (rs.next()) { // Lặp để lấy nhiều đơn
+            Request request = new Request();
+            request.setId(rs.getInt("Id"));
+            request.setEmployeeId(rs.getInt("EmployeeId")); // Giữ nguyên getInt()
+            request.setDateFrom(rs.getDate("DateFrom"));
+            request.setDateTo(rs.getDate("DateTo"));
+            request.setDateCreate(rs.getDate("DateCreate"));
+            request.setReason(rs.getString("Reason"));
+            request.setStatus(rs.getString("Status"));
+            requests.add(request);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    
+    return requests; // Trả về danh sách đơn
+}
+
+  
 
     public boolean insertRequest(String fromDate, String toDate, String reason) {
         String sql = "INSERT INTO Request (fromDate, toDate, reason, status, dateCreate) VALUES (?, ?, ?, 'Inprogress', GETDATE())";
@@ -228,8 +234,8 @@ public class RequestDAO extends DBContext {
         }
     }
 
-    public List<RequestDTO> getRequestsbyManagerID(int managerId) {
-        List<RequestDTO> list = new ArrayList<>();
+    public List<Requestform> getRequestsbyManagerID(int managerId) {
+        List<Requestform> list = new ArrayList<>();
         String sql = "SELECT r.Id, r.DateCreate, r.DateFrom, r.DateTo, r.Reason, r.Status, e.Id AS eId, e.Name AS eName " +
                      "FROM Request r " +
                      "INNER JOIN Employee e ON r.EmployeeId = e.Id " +
@@ -238,7 +244,7 @@ public class RequestDAO extends DBContext {
             st.setInt(1, managerId); // Truyền Manager ID (ví dụ: 2)
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                RequestDTO r = new RequestDTO();
+                Requestform r = new Requestform();
                 r.setId(rs.getInt("Id"));
                 r.setDateCreate(rs.getDate("DateCreate"));
                 r.setDateFrom(rs.getDate("DateFrom"));
@@ -246,7 +252,7 @@ public class RequestDAO extends DBContext {
                 r.setReason(rs.getString("Reason"));
                 r.setStatus(rs.getString("Status"));
                 r.seteId(rs.getInt("eId"));
-                r.seteName(rs.getString("eName"));
+                r.seteName(rs.getString("eName")); 
                 list.add(r);
             }
         } catch (SQLException ex) {
@@ -254,9 +260,28 @@ public class RequestDAO extends DBContext {
         }
         return list;
     }
+ 
+    public static void main(String[] args) {
+        // Tạo đối tượng RequestDAO
+        RequestDAO dao = new RequestDAO();
 
-    public List<RequestDTO> getRequestsByManagerId(int i) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        // Gán managerId cần test (thay đổi theo dữ liệu thực tế của bạn)
+        int managerId = 3;
+
+        // Gọi hàm getRequestByManagerID và nhận danh sách request
+        List<Requestform> requests = dao.getRequestsbyManagerID(managerId);
+
+        // Kiểm tra và in kết quả
+        if (requests.isEmpty()) {
+            System.out.println("Không có request nào cho managerId = " + managerId);
+        } else {
+            System.out.println("Danh sách request cho managerId = " + managerId + ":");
+            for (Requestform req : requests) {
+                System.out.println(req);
+            }
+        }
     }
 
+    
+ 
 }
