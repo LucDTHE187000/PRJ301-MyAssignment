@@ -132,87 +132,10 @@
             <h2>Hệ Thống Quản Lý Nghỉ Phép</h2>
             <div class="button-group">
                 <button class="btn btn-primary" onclick="window.location.href = '${pageContext.request.contextPath}/create.jsp'">Tạo Đơn</button>
-                <button class="btn btn-primary" onclick="window.location.href = '${pageContext.request.contextPath}/Request?action=listRequests'"> Xem Danh Sách Đơn </button>
+                <button class="btn btn-primary" onclick="window.location.href = '${pageContext.request.contextPath}/RequestList'"> Xem Danh Sách Đơn </button>
 
             </div>
-            <div id="create-form" class="content">
-                <h3>Tạo Đơn Nghỉ Phép</h3>
-                <form action="Request" method="POST">
-                    <div class="form-group">
-                        <label for="to-date">Ngày Bắt Đầu:</label>
-                        <input type="date" id="to-date" name="toDate">
-                    </div>
-                    <div class="form-group">
-                        <label for="from-date">Ngày Kết Thúc:</label>
-                        <input type="date" id="from-date" name="fromDate">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="reason">Lý Do Nghỉ Phép:</label>
-                        <textarea id="reason" name="reason" rows="3"></textarea>
-                    </div>
-                    <div class="btn-group">
-                        <button type="reset" class="btn btn-secondary">Hủy</button>
-                        <button type="submit" class="btn btn-primary">Gửi Đơn</button>
-                    </div>
-
-                </form>
-            </div>
-            <div id="list-requests" class="content" style="${not empty listRequests ? 'display:block;' : 'display:none;'}">
-                <h3>Danh Sách Đơn</h3>
-                <table>
-                    <tr>
-                        <th>Lý Do</th>
-                        <th>Từ Ngày</th>
-                        <th>Đến Ngày</th>
-                        <th>Trạng Thái</th>
-                        <th>Người Tạo</th>
-                        <th>Action</th>
-                    </tr>
-                    <!-- Duyệt qua listRequests đã được setAttribute -->
-                    <c:forEach var="req" items="${listRequests}">
-                        <tr>
-                            <td>${req.reason}</td>
-                            <td><fmt:formatDate value="${req.dateFrom}" pattern="dd/MM/yyyy"/></td>
-                            <td><fmt:formatDate value="${req.dateTo}" pattern="dd/MM/yyyy"/></td>
-                            <td>${req.status}</td>
-                            <td>${req.employeeId}</td>
-                            <td>
-                                <button class="btn btn-primary" onclick="showDetails('${req.id}', '${req.reason}', '${req.dateFrom}', '${req.dateTo}', '${req.status}', '${req.employeeId}')">Xem</button>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </table>
-            </div>
-            <div id="detail-section" style="display: none; background: white; padding: 15px; border-radius: 10px; box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2); margin-top: 15px;">
-                <h3>Chi Tiết Đơn</h3>
-                <form id="update-form" action="Request" method="POST">
-                    <input type="hidden" id="detail-id" name="id"> 
-                    <div class="form-group">
-                        <label>Lý Do:</label>
-                        <textarea id="detail-reason" name="reason" rows="3" disabled></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Từ Ngày:</label>
-                        <input type="date" id="detail-from" name="dateFrom" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label>Đến Ngày:</label>
-                        <input type="date" id="detail-to" name="dateTo" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label>Trạng Thái:</label>
-                        <input type="text" id="detail-status" name="status" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label>Người Tạo:</label>
-                        <input type="text" id="detail-employee" name="employeeId" disabled>
-                    </div>
-
-                    <button type="button" id="edit-btn" class="btn btn-warning" onclick="enableEdit()">Cập Nhật</button>
-                    <button type="submit" id="save-btn" class="btn btn-primary" style="display: none;">Lưu</button>
-                </form>
-            </div>
+            
 
             <!-- Thông báo -->
             <div id="message" style="display: none; padding: 10px; margin-top: 10px; border-radius: 5px;"></div>
