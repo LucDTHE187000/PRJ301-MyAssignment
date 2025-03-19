@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controller;
 
 import dal.RequestDAO;
@@ -16,46 +15,44 @@ import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Account;
 import model.Request;
+import model.Requestform;
 
 /**
  *
  * @author admi
  */
 public class Requestservlet extends HttpServlet {
-    
-    private RequestDAO requestDAO;
-@Override
-public void init() throws ServletException {
-    requestDAO = new RequestDAO();  // Khởi tạo DAO
-}
-    
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RequestServlet</title>");  
+            out.println("<title>Servlet RequestServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet RequestServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet RequestServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-    } 
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -63,11 +60,12 @@ public void init() throws ServletException {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
     }
 
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -75,24 +73,24 @@ public void init() throws ServletException {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
 
-if (account == null) {
-    response.sendRedirect("login.jsp");
-    return;
-}
+        if (account == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
 
-int employeeId = account.getEmployeeId();
-
-        List<Request> listRequests = requestDAO.getRequestsByEmployeeId(employeeId);
+        Request rp = new Request();
+        List<Requestform> list = request.getRequestsbyManagerID(account.getEmployeeId());
         request.setAttribute("listRequests", listRequests);
         request.getRequestDispatcher("đây.jsp").forward(request, response);
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override
