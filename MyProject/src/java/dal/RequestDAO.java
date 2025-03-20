@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dal;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,13 +13,11 @@ import java.sql.Date;
 import java.sql.*;
 import model.RequestDTO;
 import model.Requestform;
-
 /**
  *
  * @author admi
  */
-public class RequestDAO extends DBContext {
-
+public class RequestDAO extends DBContext{
     DBContext db = new DBContext();
 
     public List<Request> getRequestsByEmployeeId(int employeeId) {
@@ -234,54 +231,46 @@ public class RequestDAO extends DBContext {
         }
     }
 
-    public List<Requestform> getRequestsbyManagerID(int managerId) {
-        List<Requestform> list = new ArrayList<>();
-        String sql = "SELECT r.Id, r.DateCreate, r.DateFrom, r.DateTo, r.Reason, r.Status, e.Id AS eId, e.Name AS eName " +
-                     "FROM Request r " +
-                     "INNER JOIN Employee e ON r.EmployeeId = e.Id " +
-                     "WHERE r.EmployeeId = ?"; // Lọc theo EmployeeId của Manager
-        try (PreparedStatement st = db.connection.prepareStatement(sql)) {
-            st.setInt(1, managerId); // Truyền Manager ID (ví dụ: 2)
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                Requestform r = new Requestform();
-                r.setId(rs.getInt("Id"));
-                r.setDateCreate(rs.getDate("DateCreate"));
-                r.setDateFrom(rs.getDate("DateFrom"));
-                r.setDateTo(rs.getDate("DateTo"));
-                r.setReason(rs.getString("Reason"));
-                r.setStatus(rs.getString("Status"));
-                r.seteId(rs.getInt("eId"));
-                r.seteName(rs.getString("eName")); 
-                list.add(r);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+    public List<Requestform> getRequestsByManagerID(int managerId) {
+    List<Requestform> list = new ArrayList<>();
+    String sql = "SELECT r.Id, r.DateCreate, r.DateFrom, r.DateTo, r.Reason, r.Status, " +
+                 "e.Id AS eId, e.Name AS eName " +
+                 "FROM Request r " +
+                 "JOIN Employee e ON r.EmployeeId = e.Id " +
+                 "WHERE e.Parentemployee = ?";
+         try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, managerId);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Requestform r = new Requestform(
+                rs.getInt("Id"),
+                rs.getDate("DateCreate"),
+                rs.getDate("DateFrom"),
+                rs.getDate("DateTo"),
+                rs.getString("Reason"),
+                rs.getString("Status"),
+                rs.getInt("eId"),
+                rs.getString("eName")
+            );
+            list.add(r);
         }
-        return list;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return list;
+}
  
     public static void main(String[] args) {
-        // Tạo đối tượng RequestDAO
-        RequestDAO dao = new RequestDAO();
+    RequestDAO dao = new RequestDAO();
+    int managerId = 2; // ID của manager cần test
 
-        // Gán managerId cần test (thay đổi theo dữ liệu thực tế của bạn)
-        int managerId = 3;
+    List<Requestform> requests = dao.getRequestsByManagerID(managerId);
 
-        // Gọi hàm getRequestByManagerID và nhận danh sách request
-        List<Requestform> requests = dao.getRequestsbyManagerID(managerId);
-
-        // Kiểm tra và in kết quả
-        if (requests.isEmpty()) {
-            System.out.println("Không có request nào cho managerId = " + managerId);
-        } else {
-            System.out.println("Danh sách request cho managerId = " + managerId + ":");
-            for (Requestform req : requests) {
-                System.out.println(req);
-            }
-        }
+    for (Requestform r : requests) {
+        System.out.println(r.getId() + " | " + r.getDateCreate() + " | " + r.getDateFrom() +
+                           " | " + r.getDateTo() + " | " + r.getReason() + " | " +
+                           r.getStatus() + " | " + r.geteId() + " | " + r.geteName());
     }
-
-    
- 
 }
+}
+
