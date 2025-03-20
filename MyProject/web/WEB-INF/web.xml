@@ -61,10 +61,6 @@
         <url-pattern>/RequestList</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>RequestServlet</servlet-name>
-        <url-pattern>/RequestServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>RequestManager</servlet-name>
         <url-pattern>/RequestManager</url-pattern>
     </servlet-mapping>
