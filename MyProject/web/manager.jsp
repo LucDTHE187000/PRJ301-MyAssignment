@@ -89,7 +89,7 @@
             <button class="btn btn-primary" onclick="window.location.href = '${pageContext.request.contextPath}/create.jsp'">Tạo Đơn</button>
             <button class="btn btn-secondary" onclick="window.location.href = '${pageContext.request.contextPath}/RequestList'">Xem Đơn</button>
         </div>
-        <a href="RequestList" class="view-requests">Xem Đơn Cấp Dưới</a>
+        <a href="Requestservlet" class="view-requests">Xem Đơn Cấp Dưới</a>
     </div>
 </body>
 </html>
