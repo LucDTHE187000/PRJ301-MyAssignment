@@ -59,8 +59,20 @@ public class Requestservlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+
+        if (account != null && account.getRoleId() == 2) { 
+            int managerId = account.getEmployeeId(); 
+            RequestDAO dao = new RequestDAO();
+            List<Requestform> list = dao.getRequestsByManagerID(managerId);
+            request.setAttribute("listemployee", list);
+            request.getRequestDispatcher("đây.jsp").forward(request, response);
+        } else {
+            response.sendRedirect("login.jsp"); // Chuyển hướng nếu chưa đăng nhập
+        }
     }
 
     /**
@@ -74,18 +86,7 @@ public class Requestservlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Account account = (Account) session.getAttribute("account");
 
-        if (account == null) {
-            response.sendRedirect("login.jsp");
-            return;
-        }
-
-        Request rp = new Request();
-        List<Requestform> list = request.getRequestsbyManagerID(account.getEmployeeId());
-        request.setAttribute("listRequests", listRequests);
-        request.getRequestDispatcher("đây.jsp").forward(request, response);
     }
 
     /**
