@@ -128,6 +128,7 @@
                     <td>
                         <button class="btn btn-primary" onclick="window.location.href='http://localhost:8080/MyProject/List?action=List&requestId=${req.id}&employeeId=${req.employeeId}'">Xem</button>
                     </td>
+                    
                     </tr>
                 </c:forEach>
             </table>
