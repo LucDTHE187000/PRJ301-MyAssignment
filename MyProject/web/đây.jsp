@@ -71,6 +71,7 @@
                 <th>Lý Do</th>
                 <th>Trạng Thái</th>
                 <th>Nhân Viên</th>
+                <th>Xét Duyệt</th>
             </tr>
             <%
                 List<Requestform> requestList = (List<Requestform>) request.getAttribute("listemployee");
@@ -85,6 +86,7 @@
                 <td><%= r.getReason() %></td>
                 <td><%= r.getStatus() %></td>
                 <td><%= r.geteName() %></td>
+                <td> . </td>
             </tr>
             <%
                     }
