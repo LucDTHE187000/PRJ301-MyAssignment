@@ -92,7 +92,6 @@ public class RequestDAO extends DBContext {
         try (Connection conn = connection; PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, status);
             ps.setInt(2, requestId);
-
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -122,25 +121,46 @@ public class RequestDAO extends DBContext {
         return requests;
     }
 
-    public boolean updateRequest(int id, Date dateFrom, Date dateTo, String reason, String status) {
-        String sql = "UPDATE Request SET DateFrom = ?, DateTo = ?, Reason = ?, Status = ? WHERE Id = ?";
+    public int updateRequest(Request request) {
+        int result = -1;
+        String sql = "UPDATE Request SET DateFrom = ?, DateTo = ?, Reason = ? WHERE Id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setDate(1, dateFrom);
-            ps.setDate(2, dateTo);
-            ps.setString(3, reason);
-            ps.setString(4, status);
-            ps.setInt(5, id);
-            int affectedRows = ps.executeUpdate();
-            return affectedRows > 0;
+            ps.setDate(1, request.getDateFrom());
+            ps.setDate(2, request.getDateTo());
+            ps.setString(3, request.getReason());
+            ps.setInt(4, request.getId());
+            result = ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
+        return result;
     }
+//    Hàm main để test updateRequest của Employee
+//    public static void main(String[] args) {
+//        // Bước 1: Tạo đối tượng RequestDAO
+//        RequestDAO dao = new RequestDAO();
+//
+//        // Bước 2: Tạo đối tượng Request với thông tin cập nhật
+//        Request requestToUpdate = new Request();
+//        requestToUpdate.setId(1051); // Giả sử cập nhật bản ghi có Id = 1
+//        requestToUpdate.setDateFrom(new Date(System.currentTimeMillis())); // Ngày hiện tại
+//        requestToUpdate.setDateTo(new Date(System.currentTimeMillis() + 86400000)); // Ngày mai
+//        requestToUpdate.setReason("Lý do cập nhật để test"); // Lý do mới
+//
+//        // Bước 3: Gọi hàm updateRequest
+//        int result = dao.updateRequest(requestToUpdate);
+//
+//        // Bước 4 và 5: Kiểm tra và in kết quả
+//        if (result > 0) {
+//            System.out.println("Cập nhật thành công! Số hàng ảnh hưởng: " + result);
+//        } else {
+//            System.out.println("Cập nhật thất bại! Kiểm tra Id hoặc kết nối cơ sở dữ liệu.");
+//        }
+//    }
 
     public Request getRequestById(int requestId) {
         Request request = null;
-        String sql = "SELECT * FROM Request WHERE EmployeeId = ?";
+        String sql = "SELECT * FROM Request WHERE Id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, requestId);
             ResultSet rs = ps.executeQuery();
@@ -148,8 +168,8 @@ public class RequestDAO extends DBContext {
                 request = new Request();
                 request.setId(rs.getInt("Id"));
                 request.setEmployeeId(rs.getInt("EmployeeId"));
-                request.setDateFrom(rs.getDate("DateFrom"));
                 request.setDateTo(rs.getDate("DateTo"));
+                request.setDateFrom(rs.getDate("DateFrom"));
                 request.setDateCreate(rs.getDate("DateCreate"));
                 request.setReason(rs.getString("Reason"));
                 request.setStatus(rs.getString("Status"));
@@ -159,7 +179,6 @@ public class RequestDAO extends DBContext {
         }
         return request;
     }
-
     public Request getRequests(int employeeId, int IdRequest) {
         Request request = null;
         String sql = "select rq.Id, rq.DateCreate, rq.DateFrom, rq.DateTo, rq.Reason, rq.Status from Request rq where rq.Id = ? AND rq.EmployeeId = ?";
@@ -180,22 +199,6 @@ public class RequestDAO extends DBContext {
             e.printStackTrace();
         }
         return request;
-    }
-
-    public static void main(String[] args) {
-        RequestDAO dao = new RequestDAO();
-        Request request = dao.getRequests(1051, 2);
-
-        if (request != null) {
-            System.out.println("Request ID: " + request.getId());
-            System.out.println("Date Created: " + request.getDateCreate());
-            System.out.println("Date From: " + request.getDateFrom());
-            System.out.println("Date To: " + request.getDateTo());
-            System.out.println("Reason: " + request.getReason());
-            System.out.println("Status: " + request.getStatus());
-        } else {
-            System.out.println("Không tìm thấy request!");
-        }
     }
 
     public boolean insertRequest(String fromDate, String toDate, String reason) {
@@ -238,7 +241,7 @@ public class RequestDAO extends DBContext {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, requestId);
             int affectedRows = ps.executeUpdate();
-            return affectedRows > 0; 
+            return affectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -273,4 +276,5 @@ public class RequestDAO extends DBContext {
         }
         return list;
     }
+
 }
