@@ -36,6 +36,10 @@
         <servlet-name>Requestservlet</servlet-name>
         <servlet-class>controller.Requestservlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ListController</servlet-name>
+        <servlet-class>controller.ListController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/welcome</url-pattern>
@@ -53,19 +57,15 @@
         <url-pattern>/Logout</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ProcessRequest</servlet-name>
-        <url-pattern>/ProcessRequest</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>RequestListController</servlet-name>
         <url-pattern>/RequestList</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>RequestManager</servlet-name>
-        <url-pattern>/RequestManager</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>Requestservlet</servlet-name>
         <url-pattern>/Requestservlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListController</servlet-name>
+        <url-pattern>/List</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -123,10 +123,10 @@
                         <td>${req.reason}</td>
                         <td><fmt:formatDate value="${req.getDateFrom()}" pattern="dd/MM/yyyy"/></td>
                     <td><fmt:formatDate value="${req.getDateTo()}" pattern="dd/MM/yyyy"/></td>
-                    <td>${req.status}</td>
-                    <td>${req.employeeId}</td>
+                    <td>${req.getStatus()}</td>
+                    <td>${req.getEmployeeId()}</td>
                     <td>
-                        <button class="btn btn-primary" onclick="showDetails('${req.id}', '${req.reason}', '${req.dateFrom}', '${req.dateTo}', '${req.status}', '${req.employeeId}')">Xem</button>
+                        <button class="btn btn-primary" onclick="window.location.href='http://localhost:8080/MyProject/List?action=List&requestId=${req.id}&employeeId=${req.employeeId}'">Xem</button>
                     </td>
                     </tr>
                 </c:forEach>

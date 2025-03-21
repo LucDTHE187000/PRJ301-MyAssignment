@@ -2,60 +2,53 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
+
 package controller;
 
 import dal.RequestDAO;
 import java.io.IOException;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.io.PrintWriter;
 import model.Account;
 import model.Request;
-import model.RequestDTO;
 
 /**
  *
  * @author admi
  */
-public class RequestListController extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
+public class ListController extends HttpServlet {
+   
+    /** 
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RequestListController</title>");
+            out.println("<title>Servlet ListController</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet RequestListController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ListController at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-    }
+    } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
+    /** 
      * Handles the HTTP <code>GET</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -63,21 +56,31 @@ public class RequestListController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Account account = (Account) session.getAttribute("account");
-        if (account == null) {
-            response.sendRedirect("welcome");
-            return;
-        }
-        RequestDAO requestDAO = new RequestDAO();
-        List<Request> list = requestDAO.getRequestsByEmployeeId(account.getEmployeeId());
-        request.setAttribute("listRequests", list);
-        request.getRequestDispatcher("list.jsp").forward(request, response);
+    throws ServletException, IOException {
+       HttpSession session = request.getSession();
+    Account account = (Account) session.getAttribute("account");
+    if (account == null) {
+        response.sendRedirect("welcome");
+        return;
     }
-    /**
+    
+    String action = request.getParameter("action");
+    
+    if ("List".equals(action)) {
+        int requestId = Integer.parseInt(request.getParameter("requestId"));
+        int employeeId = Integer.parseInt(request.getParameter("employeeId"));
+        
+        RequestDAO dao = new RequestDAO();
+        Request requestDetail = dao.getRequests(account.getEmployeeId(),requestId);
+        request.setAttribute("requestDetail", requestDetail);
+        request.getRequestDispatcher("Check.jsp").forward(request, response);
+        return;
+    }
+    request.getRequestDispatcher("list.jsp").forward(request, response);
+}
+
+    /** 
      * Handles the HTTP <code>POST</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -85,17 +88,12 @@ public class RequestListController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("managerId") == null) {
-            response.sendRedirect("login.jsp"); // Chuyển về trang đăng nhập nếu session không hợp lệ
-            return;
-        }
+    throws ServletException, IOException {
+        processRequest(request, response);
     }
 
-    /**
+    /** 
      * Returns a short description of the servlet.
-     *
      * @return a String containing servlet description
      */
     @Override

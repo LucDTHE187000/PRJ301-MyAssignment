@@ -122,18 +122,20 @@ public class RequestDAO extends DBContext {
         return requests;
     }
 
-    public boolean updateRequest(int id, String fromDate, String toDate, String reason) {
-        String sql = "UPDATE Requests SET fromDate = ?, toDate = ?, reason = ? WHERE id = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) { // Dùng connection có sẵn từ DBContext
-            ps.setString(1, fromDate);
-            ps.setString(2, toDate);
+    public boolean updateRequest(int id, Date dateFrom, Date dateTo, String reason, String status) {
+        String sql = "UPDATE Request SET DateFrom = ?, DateTo = ?, Reason = ?, Status = ? WHERE Id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setDate(1, dateFrom);
+            ps.setDate(2, dateTo);
             ps.setString(3, reason);
-            ps.setInt(4, id);
-            return ps.executeUpdate() > 0;
+            ps.setString(4, status);
+            ps.setInt(5, id);
+            int affectedRows = ps.executeUpdate();
+            return affectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
     public Request getRequestById(int requestId) {
@@ -158,15 +160,14 @@ public class RequestDAO extends DBContext {
         return request;
     }
 
-    public Request getRequests(int employeeId ,int IdRequest ) {
+    public Request getRequests(int employeeId, int IdRequest) {
         Request request = null;
-        String sql = "select rq.Id,rq.DateCreate,rq.DateFrom,rq.DateTo,rq.Reason,rq.Status from Request rq where rq.Id = ? AND rq.EmployeeId = ?";
+        String sql = "select rq.Id, rq.DateCreate, rq.DateFrom, rq.DateTo, rq.Reason, rq.Status from Request rq where rq.Id = ? AND rq.EmployeeId = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-              ps.setInt(1, employeeId);
-             ps.setInt(2, IdRequest);
+            ps.setInt(1, IdRequest);
+            ps.setInt(2, employeeId);
             ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) { // Lặp để lấy nhiều đơn
+            while (rs.next()) {
                 request = new Request();
                 request.setId(rs.getInt("Id"));
                 request.setDateCreate(rs.getDate("DateCreate"));
@@ -176,13 +177,13 @@ public class RequestDAO extends DBContext {
                 request.setStatus(rs.getString("Status"));
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return request;
     }
-    
-    
+
     public static void main(String[] args) {
-        RequestDAO dao = new RequestDAO(); 
+        RequestDAO dao = new RequestDAO();
         Request request = dao.getRequests(1051, 2);
 
         if (request != null) {
@@ -196,8 +197,6 @@ public class RequestDAO extends DBContext {
             System.out.println("Không tìm thấy request!");
         }
     }
-
-
 
     public boolean insertRequest(String fromDate, String toDate, String reason) {
         String sql = "INSERT INTO Request (fromDate, toDate, reason, status, dateCreate) VALUES (?, ?, ?, 'Inprogress', GETDATE())";
@@ -235,11 +234,11 @@ public class RequestDAO extends DBContext {
     }
 
     public boolean deleteRequest(int requestId) {
-        String sql = "DELETE FROM request WHERE id = ?";
+        String sql = "DELETE FROM Request WHERE Id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, requestId);
             int affectedRows = ps.executeUpdate();
-            return affectedRows > 0; // Trả về true nếu xóa thành công
+            return affectedRows > 0; 
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
