@@ -40,6 +40,14 @@
         <servlet-name>ListController</servlet-name>
         <servlet-class>controller.ListController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UpdateController</servlet-name>
+        <servlet-class>controller.UpdateController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteController</servlet-name>
+        <servlet-class>controller.DeleteController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/welcome</url-pattern>
@@ -68,4 +76,13 @@
         <servlet-name>ListController</servlet-name>
         <url-pattern>/List</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateController</servlet-name>
+        <url-pattern>/Update</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteController</servlet-name>
+        <url-pattern>/Delete</url-pattern>
+    </servlet-mapping>
+
 </web-app>
