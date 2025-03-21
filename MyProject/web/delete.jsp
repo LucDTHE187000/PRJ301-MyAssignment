@@ -77,7 +77,7 @@
 <body>
     <div class="container">
         <h2>Xóa Đơn Nghỉ Phép</h2>
-        <form method="post" onsubmit="return confirmDelete()">
+        <form method="POST" onsubmit="return confirmDelete()" action="Delete">
             <input type="hidden" name="id" value="<%= request.getParameter("id") %>">
             <button type="submit">Xóa</button>
         </form>
