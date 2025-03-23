@@ -87,17 +87,17 @@ public class RequestDAO extends DBContext {
     }
 
     public boolean updateRequestStatus(int requestId, String status) {
-        String sql = "UPDATE Request SET Status = ? WHERE Id = ?";
-
-        try (Connection conn = connection; PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, status);
-            ps.setInt(2, requestId);
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    String sql = "UPDATE Request SET Status = ? WHERE Id = ?";
+    try (Connection conn = connection; PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, status);
+        stmt.setInt(2, requestId);
+        int rowsAffected = stmt.executeUpdate();
+        return rowsAffected > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
         return false;
     }
+}
 
     public List<Request> getInprogressRequestsFromManagers() {
         List<Request> requests = new ArrayList<>();
@@ -202,18 +202,17 @@ public class RequestDAO extends DBContext {
     }
 
     public boolean insertRequest(String fromDate, String toDate, String reason) {
-        String sql = "INSERT INTO Request (fromDate, toDate, reason, status, dateCreate) VALUES (?, ?, ?, 'Inprogress', GETDATE())";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, fromDate);
-            ps.setString(2, toDate);
-            ps.setString(3, reason);
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+    String sql = "INSERT INTO Request (DateFrom, DateTo, Reason, Status, DateCreate) VALUES (?, ?, ?, 'Inprogress', GETDATE())";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, fromDate);
+        ps.setString(2, toDate);
+        ps.setString(3, reason);
+        return ps.executeUpdate() > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
     }
-
+}
     public List<Request> getAllRequests() {
         List<Request> list = new ArrayList<>();
         String sql = "SELECT * FROM Request ORDER BY dateCreate DESC";
@@ -249,32 +248,31 @@ public class RequestDAO extends DBContext {
     }
 
     public List<Requestform> getRequestsByManagerID(int managerId) {
-        List<Requestform> list = new ArrayList<>();
-        String sql = "SELECT r.Id, r.DateCreate, r.DateFrom, r.DateTo, r.Reason, r.Status, "
-                + "e.Id AS eId, e.Name AS eName "
-                + "FROM Request r "
-                + "JOIN Employee e ON r.EmployeeId = e.Id "
-                + "WHERE e.Parentemployee = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, managerId);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Requestform r = new Requestform(
-                        rs.getInt("Id"),
-                        rs.getDate("DateCreate"),
-                        rs.getDate("DateFrom"),
-                        rs.getDate("DateTo"),
-                        rs.getString("Reason"),
-                        rs.getString("Status"),
-                        rs.getInt("eId"),
-                        rs.getString("eName")
-                );
-                list.add(r);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    List<Requestform> list = new ArrayList<>();
+    String sql = "SELECT r.Id, r.DateCreate, r.DateFrom, r.DateTo, r.Reason, r.Status, "
+            + "e.Id AS eId, e.Name AS eName "
+            + "FROM Request r "
+            + "JOIN Employee e ON r.EmployeeId = e.Id "
+            + "WHERE e.Parentemployee = ?";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, managerId);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Requestform r = new Requestform(
+                    rs.getInt("Id"),
+                    rs.getDate("DateCreate"),
+                    rs.getDate("DateFrom"),
+                    rs.getDate("DateTo"),
+                    rs.getString("Reason"),
+                    rs.getString("Status"),
+                    rs.getInt("eId"),
+                    rs.getString("eName")
+            );
+            list.add(r);
         }
-        return list;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
-
+    return list;
+}
 }

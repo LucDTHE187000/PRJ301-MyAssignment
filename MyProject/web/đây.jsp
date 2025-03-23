@@ -7,6 +7,8 @@
 <%@page import="java.util.List"%>
 <%@page import="model.Requestform"%>
 <%@page import="model.Account"%>
+<%@page import="java.text.SimpleDateFormat"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -57,15 +59,42 @@
             background-color: #ddd;
             transition: 0.3s;
         }
+        /* CSS cho nút */
+        .approve-btn, .reject-btn {
+            padding: 5px 10px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+        }
+        .approve-btn {
+            background-color: #28a745; /* Màu xanh cho nút Xét Duyệt */
+        }
+        .approve-btn:hover {
+            background-color: #218838;
+        }
+        .reject-btn {
+            background-color: #dc3545; /* Màu đỏ cho nút Từ Chối */
+        }
+        .reject-btn:hover {
+            background-color: #c82333;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h2>Danh Sách Đơn Của Nhân Viên</h2>
+        <% String message = (String) request.getAttribute("message"); %>
+        <% if (message != null) { %>
+            <p style="color: <%= message.contains("thành công") ? "green" : "red" %>;"><%= message %></p>
+        <% } %>
         <table>
             <tr>
                 <th>ID</th>
-                <th>Từ Ngày </th>
+                <th>Từ Ngày</th>
                 <th>Đến Ngày</th>
                 <th>Ngày Tạo</th>
                 <th>Lý Do</th>
@@ -80,23 +109,39 @@
             %>
             <tr>
                 <td><%= r.getId() %></td>
+                <td><%= r.getDateFrom() %></td> <!-- DateFrom is "Từ Ngày" -->
+                <td><%= r.getDateTo() %></td>   <!-- DateTo is "Đến Ngày" -->
                 <td><%= r.getDateCreate() %></td>
-                <td><%= r.getDateFrom() %></td>
-                <td><%= r.getDateTo() %></td>
                 <td><%= r.getReason() %></td>
                 <td><%= r.getStatus() %></td>
                 <td><%= r.geteName() %></td>
-                <td> . </td>
+                <td>
+                    <% if ("Inprogress".equals(r.getStatus())) { %>
+                        <form style="display:inline;" action="ApproveRequestServlet" method="post">
+                            <input type="hidden" name="id" value="<%= r.getId() %>">
+                            <input type="hidden" name="action" value="approve">
+                            <button type="submit" class="approve-btn">Xét Duyệt</button>
+                        </form>
+                        <form style="display:inline;" action="ApproveRequestServlet" method="post">
+                            <input type="hidden" name="id" value="<%= r.getId() %>">
+                            <input type="hidden" name="action" value="reject">
+                            <button type="submit" class="reject-btn">Từ Chối</button>
+                        </form>
+                    <% } else { %>
+                        Đã xử lý
+                    <% } %>
+                </td>
             </tr>
             <%
                     }
                 } else {
             %>
             <tr>
-                <td colspan="7">Không có đơn nào.</td>
+                <td colspan="8">Không có đơn nào.</td>
             </tr>
             <% } %>
         </table>
+        <a href="welcome.jsp">Quay Lại</a>
     </div>
 </body>
 </html>
